@@ -7,12 +7,18 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.alxmag.intellijfakersupport.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.alxmag.intellijfakersupport.services.MyProjectService"/>
+
+        <fileType name="Faker Template File"
+                  implementationClass="com.github.alxmag.intellijfakersupport.lang.psi.FakerTemplateFileType"
+                  language="FakerTemplate"
+                  fieldName="INSTANCE"
+                  extensions="faker"/>
+
+        <lang.syntaxHighlighterFactory language="FakerTemplate"
+                                       implementationClass="com.github.alxmag.intellijfakersupport.lang.FakerSyntaxHighlighterFactory"/>
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.alxmag.intellijfakersupport.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+
     </applicationListeners>
 </idea-plugin>

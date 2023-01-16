@@ -9,7 +9,7 @@ plugins {
     // Kotlin support
     id("org.jetbrains.kotlin.jvm") version "1.7.21"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.10.0"
+    id("org.jetbrains.intellij") version "1.11.0"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "2.0.0"
     // Gradle Qodana Plugin
@@ -29,6 +29,14 @@ repositories {
 // Set the JVM language level used to build project. Use Java 11 for 2020.3+, and Java 17 for 2022.2+.
 kotlin {
     jvmToolchain(11)
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs("src/main/gen")
+        }
+    }
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
