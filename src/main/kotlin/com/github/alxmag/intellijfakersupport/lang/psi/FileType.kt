@@ -1,11 +1,11 @@
 package com.github.alxmag.intellijfakersupport.lang.psi
 
-import com.github.alxmag.intellijfakersupport.lang.FakerTemplateLanguage
+import com.github.alxmag.intellijfakersupport.lang.FakerLanguage
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.fileTypes.LanguageFileType
 import javax.swing.Icon
 
-class FakerTemplateFileType : LanguageFileType(FakerTemplateLanguage) {
+class FileType : LanguageFileType(FakerLanguage) {
     override fun getName(): String = "Faker Template File"
 
     override fun getDescription(): String = "Faker template file"
@@ -15,6 +15,7 @@ class FakerTemplateFileType : LanguageFileType(FakerTemplateLanguage) {
     override fun getIcon(): Icon? = AllIcons.Actions.PrettyPrint
 
     companion object {
-        val INSTANCE = FakerTemplateFileType()
+        @Suppress("unused")
+        val INSTANCE = FileType()
     }
 }
