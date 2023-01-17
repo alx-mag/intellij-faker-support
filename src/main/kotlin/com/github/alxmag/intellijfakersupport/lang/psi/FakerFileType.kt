@@ -5,17 +5,17 @@ import com.intellij.icons.AllIcons
 import com.intellij.openapi.fileTypes.LanguageFileType
 import javax.swing.Icon
 
-class FileType : LanguageFileType(FakerLanguage) {
+class FakerFileType : LanguageFileType(FakerLanguage) {
     override fun getName(): String = "Faker Template File"
 
     override fun getDescription(): String = "Faker template file"
 
     override fun getDefaultExtension(): String = "faker"
 
-    override fun getIcon(): Icon? = AllIcons.Actions.PrettyPrint
+    override fun getIcon(): Icon = AllIcons.Actions.PrettyPrint
 
     companion object {
         @Suppress("unused")
-        val INSTANCE = FileType()
+        val INSTANCE = FakerFileType()
     }
 }
