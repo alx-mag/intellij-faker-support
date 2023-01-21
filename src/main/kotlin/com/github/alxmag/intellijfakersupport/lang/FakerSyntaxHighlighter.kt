@@ -19,7 +19,7 @@ class FakerSyntaxHighlighter : SyntaxHighlighterBase() {
         FakerTypes.DOT -> DOT_KEYS
         FakerTypes.COMMA -> COMMA_KEYS
 
-        FakerTypes.STRING_LITERAL -> STRING_LITERAL_KEYS
+        FakerTypes.STRING_LITERAL, FakerTypes.REGULAR_STRING_PART -> STRING_LITERAL_KEYS
         FakerTypes.INT_LITERAL -> NUMBER_LITERAL_KEYS
 
         FakerTypes.EXPRESSION_LBRACE, FakerTypes.EXPRESSION_RBRACE -> BRACE_KEYS

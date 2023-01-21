@@ -1,0 +1,70 @@
+{
+  parserClass="com.github.alxmag.intellijfakersupport.lang.FakerParser"
+  parserUtilClass="com.github.alxmag.intellijfakersupport.lang.FakerParserUtil"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Faker"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.github.alxmag.intellijfakersupport.lang.psi"
+  psiImplPackage="com.github.alxmag.intellijfakersupport.lang.psi.impl"
+
+  elementTypeHolderClass="com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes"
+  elementTypeClass="com.github.alxmag.intellijfakersupport.lang.psi.FakerElementType"
+  tokenTypeClass="com.github.alxmag.intellijfakersupport.lang.psi.FakerTokenType"
+
+  tokens = [
+    REGULAR_TEXT="regexp:[0-9]"
+
+    L_CURLY='#{'
+    R_CURLY='}'
+    L_BRACKET='['
+    R_BRACKET=']'
+
+    DOT='.'
+    COMMA=','
+    COLON=':'
+    SINGLE_QUOTE="'"
+
+    ARGS_PREFIX="regexp:\s+"
+
+    SINGLE_QUOTED_STRING="regexp:'([^\\'\r\n]|\\[^\r\n])*'?"
+
+    SINGLE_QUOTED_EXPR="regexp:'#\{([^\\'\r\n]|\\[^\r\n])}*'?"
+//        STRING='regexp:"([^\\"\r\n]|\\([\\"/bfnrt]|u[a-fA-F0-9]{4}))*"?'
+
+    NUMBER='regexp:-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d*)?'
+    // Actually not defined in RFC 4627, but may be used for JSON5 and helps with
+    // auto completion of keywords. Semantically, it represents "bad word" type
+    // of tokens
+    // Could be as loose as [^\s\[\]{}:,\"\']+, but is slightly more restricted
+    // for the time being to match most forms of npm package names and semver versions
+    // in package.json.
+    // See https://github.com/npm/validate-npm-package-name
+//    IDENTIFIER="regexp:[[:jletterdigit:]~!()*\-./@\^<>=]+"
+    IDENTIFIER="regexp:[a-zA-Z]+[a-zA-Z0-9]*"
+  ]
+}
+
+fakerFile ::= expression*
+
+//private expression ::= '#{' functionName args? '}'
+private expression ::= NUMBER* expressionD
+
+expressionD ::= '#{' functionName '}'
+functionName ::= IDENTIFIER (DOT IDENTIFIER)*
+args ::= ARGS_PREFIX argsList
+argsList ::= arg* (','|&'}') {
+  recoverWhile = not_brace_or_next_arg
+  pin=1
+}
+
+arg ::= SINGLE_QUOTED_STRING | SINGLE_QUOTED_EXPR
+//arg ::= SINGLE_QUOTE '#{' functionName '}' SINGLE_QUOTE
+//arg ::= SINGLE_QUOTE 'fooz' SINGLE_QUOTE
+
+//args ::= param (param ",")*
+//
+//param ::= "'" STRING_LITERAL "'"
+
+private not_brace_or_next_arg ::= !('}'|arg)

@@ -1,5 +1,7 @@
 package com.github.alxmag.intellijfakersupport.lang.psi
 
+import com.intellij.psi.tree.IElementType
+
 object FakerTypes {
 
     @JvmField
@@ -23,6 +25,11 @@ object FakerTypes {
     val STRING_LITERAL = FakerElementType("String param")
     @JvmField
     val INT_LITERAL = FakerElementType("Integer literal")
+
+    @JvmField
+    var REGULAR_STRING_PART: IElementType = FakerElementType("Regular String Part")
+    @JvmField
+    var HASH: IElementType = FakerElementType("Hash")
 
     @JvmField
     val EXPRESSION_LBRACE = FakerElementType("Expression lbrace")
