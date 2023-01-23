@@ -22,7 +22,7 @@ class FakerSyntaxHighlighter : SyntaxHighlighterBase() {
         FakerTypes.STRING_LITERAL, FakerTypes.REGULAR_STRING_PART -> STRING_LITERAL_KEYS
         FakerTypes.INT_LITERAL -> NUMBER_LITERAL_KEYS
 
-        FakerTypes.EXPRESSION_LBRACE, FakerTypes.EXPRESSION_RBRACE -> BRACE_KEYS
+        FakerTypes.HASH, FakerTypes.EXPRESSION_LBRACE, FakerTypes.EXPRESSION_RBRACE -> BRACE_KEYS
 
         else -> EMPTY_KEYS
     }

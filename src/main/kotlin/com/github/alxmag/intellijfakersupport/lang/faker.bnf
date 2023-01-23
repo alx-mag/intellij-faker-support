@@ -14,12 +14,10 @@
   tokenTypeClass="com.github.alxmag.intellijfakersupport.lang.psi.FakerTokenType"
 
   tokens = [
-    REGULAR_TEXT="regexp:[0-9]"
-
-    L_CURLY='#{'
-    R_CURLY='}'
-    L_BRACKET='['
-    R_BRACKET=']'
+    REGULAR_STRING_PART="regexp:([^\\\"#])+"
+    HASH='#'
+    EXPRESSION_LBRACE='{'
+    EXPRESSION_RBRACE='}'
 
     DOT='.'
     COMMA=','
@@ -46,20 +44,26 @@
   ]
 }
 
-fakerFile ::= expression*
+fakerFile ::= regularString* expression*
+regularString ::= (REGULAR_STRING_PART)+
+//expression ::= HASH EXPRESSION_LBRACE functionName EXPRESSION_RBRACE
+expression ::= HASH EXPRESSION_LBRACE {
+  pin=1
+  recoverWhile = not_brace_or_next_arg
+}
+functionName ::= IDENTIFIER (DOT IDENTIFIER)*
 
 //private expression ::= '#{' functionName args? '}'
-private expression ::= NUMBER* expressionD
+//private expression ::= NUMBER* expressionD
+//
+//expressionD ::= '#{' functionName '}'
+//args ::= ARGS_PREFIX argsList
+//argsList ::= arg* (','|&'}') {
+//  recoverWhile = not_brace_or_next_arg
+//  pin=1
+//}
 
-expressionD ::= '#{' functionName '}'
-functionName ::= IDENTIFIER (DOT IDENTIFIER)*
-args ::= ARGS_PREFIX argsList
-argsList ::= arg* (','|&'}') {
-  recoverWhile = not_brace_or_next_arg
-  pin=1
-}
-
-arg ::= SINGLE_QUOTED_STRING | SINGLE_QUOTED_EXPR
+//arg ::= SINGLE_QUOTED_STRING | SINGLE_QUOTED_EXPR
 //arg ::= SINGLE_QUOTE '#{' functionName '}' SINGLE_QUOTE
 //arg ::= SINGLE_QUOTE 'fooz' SINGLE_QUOTE
 

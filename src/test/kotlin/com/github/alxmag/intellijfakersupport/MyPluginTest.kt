@@ -8,7 +8,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.util.PsiErrorElementUtil
 import com.github.alxmag.intellijfakersupport.services.MyProjectService
 
-@TestDataPath("\$CONTENT_ROOT/src/test/testData")
+@TestDataPath("\$CONTENT_ROOT/testData")
 class MyPluginTest : BasePlatformTestCase() {
 
     fun testXMLFile() {
@@ -27,12 +27,6 @@ class MyPluginTest : BasePlatformTestCase() {
 
     fun testRename() {
         myFixture.testRename("foo.xml", "foo_after.xml", "a2")
-    }
-
-    fun testProjectService() {
-        val projectService = project.service<MyProjectService>()
-
-        assertEquals(4, projectService.getRandomNumber())
     }
 
     override fun getTestDataPath() = "src/test/testData/rename"

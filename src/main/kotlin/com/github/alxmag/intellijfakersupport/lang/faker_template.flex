@@ -26,16 +26,22 @@ IDENTIFIER=[:jletter:] [:jletterdigit:]*
 %state IN_FUNCTION_ARGS
 %state IN_EXPRESSION
 %state AFTER_HASH
-%state AFTER_EXPRESSION_PREFIX
+%state IN_EXPRESSION
 
 %%
 
 <YYINITIAL> {
-  ([^\\\"\#])+         { return FakerTypes.REGULAR_STRING_PART; }
-  "#{"                 { yybegin(AFTER_EXPRESSION_PREFIX); return FakerTypes.EXPRESSION_LBRACE; }
+  ([^\\\"\#])+   { return FakerTypes.REGULAR_STRING_PART; }
+  "#"            { yybegin(AFTER_HASH); return FakerTypes.HASH; }
 }
 
-<AFTER_EXPRESSION_PREFIX> {
+<AFTER_HASH> {
+    "{"   { yybegin(IN_EXPRESSION); return FakerTypes.EXPRESSION_LBRACE; }
+    "#"   { return FakerTypes.HASH; }
+    [^{]  { yybegin(YYINITIAL); return FakerTypes.REGULAR_STRING_PART; }
+}
+
+<IN_EXPRESSION> {
     {IDENTIFIER}    { return FakerTypes.IDENTIFIER; }
     \.              { return FakerTypes.DOT; }
     "}"             { yybegin(YYINITIAL); return FakerTypes.EXPRESSION_RBRACE; }
@@ -61,7 +67,7 @@ IDENTIFIER=[:jletter:] [:jletterdigit:]*
 
 <IN_EXPRESSION> {
     "}"           { yybegin(IN_PARAM); return FakerTypes.EXPRESSION_RBRACE; }
-    "\."          { return FakerTypes.DOT; }
+    "."           { return FakerTypes.DOT; }
     {IDENTIFIER}  { return FakerTypes.IDENTIFIER; }
 }
 
