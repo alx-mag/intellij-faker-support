@@ -21,12 +21,16 @@ WHITE_SPACE=[\ \n\t\f]
 
 IDENTIFIER=[:jletter:] [:jletterdigit:]*
 
-%state IN_FUNCTION_NAME
 %state IN_PARAM
+%state IN_PARAM_AFTER_HASH
 %state IN_FUNCTION_ARGS
 %state IN_EXPRESSION
 %state AFTER_HASH
 %state IN_EXPRESSION
+
+%{
+   boolean nestedExpression = false;
+%}
 
 %%
 
@@ -44,14 +48,15 @@ IDENTIFIER=[:jletter:] [:jletterdigit:]*
 <IN_EXPRESSION> {
     {IDENTIFIER}    { return FakerTypes.IDENTIFIER; }
     \.              { return FakerTypes.DOT; }
-    "}"             { yybegin(YYINITIAL); return FakerTypes.EXPRESSION_RBRACE; }
+    "}"  {
+      if (nestedExpression) {
+          nestedExpression = false;
+          yybegin(IN_PARAM);
+      }
+      else yybegin(YYINITIAL);
+      return FakerTypes.EXPRESSION_RBRACE;
+    }
     {WHITE_SPACE}+  { yybegin(IN_FUNCTION_ARGS); return FakerTypes.PARAMS_LIST_BEGIN; }
-}
-
-<IN_FUNCTION_NAME> {
-   {WHITE_SPACE}+  { yybegin(IN_FUNCTION_ARGS); return FakerTypes.PARAMS_LIST_BEGIN; }
-   "\."            { return FakerTypes.DOT; }
-   {IDENTIFIER}    { return FakerTypes.IDENTIFIER; }
 }
 
 <IN_FUNCTION_ARGS> {
@@ -61,8 +66,18 @@ IDENTIFIER=[:jletter:] [:jletterdigit:]*
 
 <IN_PARAM> {
     "'"         { yybegin(IN_FUNCTION_ARGS); return FakerTypes.PARAM_END; }
-    "#{"        { yybegin(IN_EXPRESSION); return FakerTypes.EXPRESSION_LBRACE; }
-    ([^\'])+    { return FakerTypes.STRING_LITERAL; }
+    "#"         { yybegin(IN_PARAM_AFTER_HASH); return FakerTypes.HASH; }
+    [^\']       { return FakerTypes.REGULAR_STRING_PART; }
+}
+
+<IN_PARAM_AFTER_HASH> {
+    "{"   {
+      nestedExpression = true;
+      yybegin(IN_EXPRESSION);
+      return FakerTypes.EXPRESSION_LBRACE;
+    }
+    "#"   { return FakerTypes.HASH; }
+    [^{]  { yybegin(YYINITIAL); return FakerTypes.REGULAR_STRING_PART; }
 }
 
 
