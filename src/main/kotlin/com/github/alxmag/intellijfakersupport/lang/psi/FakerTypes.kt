@@ -5,6 +5,9 @@ import com.intellij.psi.tree.IElementType
 object FakerTypes {
 
     @JvmField
+    val CONTENT = FakerElementType("Content")
+
+    @JvmField
     val WHITESPACE = FakerElementType("WHITESPACE")
     @JvmField
     val DOT = FakerElementType(".")

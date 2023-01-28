@@ -1,0 +1,47 @@
+
+{
+  parserClass="com.github.alxmag.intellijfakersupport.lang.FakerParser"
+  parserUtilClass="com.github.alxmag.intellijfakersupport.lang.FakerParserUtil"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Faker"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.github.alxmag.intellijfakersupport.lang.psi"
+  psiImplPackage="com.github.alxmag.intellijfakersupport.lang.psi.impl"
+
+  elementTypeHolderClass="com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes"
+  elementTypeClass="com.github.alxmag.intellijfakersupport.lang.psi.FakerElementType"
+  tokenTypeClass="com.github.alxmag.intellijfakersupport.lang.psi.FakerTokenType"
+
+  tokens = [
+    REGULAR_STRING_PART="regexp:(([^\\\"\#]) | (#[^{]))"
+    EXPRESSION_LBRACE='#{'
+    EXPRESSION_RBRACE='}'
+
+    DOT='.'
+    COMMA=','
+    SINGLE_QUOTE="'"
+
+    ARGS_PREFIX="regexp:(\s)*"
+
+    IDENTIFIER="regexp:[a-zA-Z]+[a-zA-Z0-9]+"
+  ]
+}
+
+fakerFile ::= (regularString | expression)*
+fakerFile ::= (expression)*
+regularString ::= (REGULAR_STRING_PART)+
+expression ::= EXPRESSION_LBRACE functionName argsPart? EXPRESSION_RBRACE {
+  pin=1
+}
+functionName ::= IDENTIFIER (DOT IDENTIFIER)*
+private argsPart ::= argsList
+private argsList ::= ARGS_PREFIX arg* {
+  pin=1
+}
+arg ::= "'" REGULAR_STRING_PART* "'" (','|&'}') {
+  pin=1
+}
+
+private not_brace_or_next_arg ::= !('}'|arg)

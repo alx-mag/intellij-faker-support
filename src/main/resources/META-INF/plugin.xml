@@ -16,6 +16,8 @@
 
         <lang.syntaxHighlighterFactory language="Faker"
                                        implementationClass="com.github.alxmag.intellijfakersupport.lang.FakerSyntaxHighlighterFactory"/>
+        <lang.parserDefinition language="Faker"
+                               implementationClass="com.github.alxmag.intellijfakersupport.lang.FakerParserDefinition"/>
     </extensions>
 
     <applicationListeners>

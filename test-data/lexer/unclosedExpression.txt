@@ -1,0 +1,3 @@
+Regular String Part ('foo')
+Expression lbrace ('#{')
+Identifier ('bar')

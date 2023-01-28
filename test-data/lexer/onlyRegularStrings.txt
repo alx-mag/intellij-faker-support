@@ -1,0 +1,1 @@
+Regular String Part ('my#regular @## #str,r,ing# ,')
