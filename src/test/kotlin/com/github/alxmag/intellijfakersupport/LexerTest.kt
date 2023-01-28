@@ -3,26 +3,59 @@ package com.github.alxmag.intellijfakersupport
 import com.github.alxmag.intellijfakersupport.lang.FakerLexerAdapter
 import com.intellij.lexer.Lexer
 import com.intellij.testFramework.LexerTestCase
-import com.intellij.testFramework.TestDataPath
 
-@TestDataPath("\$CONTENT_ROOT/testData")
 class LexerTest : LexerTestCase() {
     override fun createLexer(): Lexer = FakerLexerAdapter()
-//    override fun createLexer(): Lexer = FakerFlexLexer()
+    //    override fun createLexer(): Lexer = FakerFlexLexer()
+    override fun getDirPath(): String  = throw UnsupportedOperationException()
 
-    override fun getDirPath(): String = "lexer"
 
-    private fun getTestDataPath(): String = "test-data"
+    fun testValidCasesTemplate() = doTest(
+        "my#regular @## #str,r,ing#{ident1.ident2 'foo', 'bar', '##{expr}', '#{expr2}'}#",
+        """Regular String Part ('my#regular @## #str,r,ing')
+          |Expression lbrace ('#{')
+          |Identifier ('ident1')
+          |. ('.')
+          |Identifier ('ident2')
+          |Params list begin (' ')
+          |Param begin (''')
+          |Regular String Part ('foo')
+          |Param end (''')
+          |, (',')
+          |WHITE_SPACE (' ')
+          |Param begin (''')
+          |Regular String Part ('bar')
+          |Param end (''')
+          |, (',')
+          |WHITE_SPACE (' ')
+          |Param begin (''')
+          |Regular String Part ('#')
+          |Expression lbrace ('#{')
+          |Identifier ('expr')
+          |Expression rbrace ('}')
+          |Param end (''')
+          |, (',')
+          |WHITE_SPACE (' ')
+          |Param begin (''')
+          |Expression lbrace ('#{')
+          |Identifier ('expr2')
+          |Expression rbrace ('}')
+          |Param end (''')
+          |Expression rbrace ('}')
+          |Regular String Part ('#')""".trimMargin()
+    )
 
-    override fun getPathToTestDataFile(extension: String?): String {
-        return getTestDataPath() + "/" + dirPath + "/" + super.getTestName(true) + extension
-    }
+    fun testOnlyRegularStrings() = doTest(
+        "my#regular @## #str,r,ing# ,",
+        """Regular String Part ('my#regular @## #str,r,ing# ,')""".trimMargin()
+    )
 
-    fun testValidCasesTemplate() = doFileTest()
-
-    fun testOnlyRegularStrings() = doFileTest()
-
-    fun testUnclosedExpression() = doFileTest()
+    fun testUnclosedExpression() = doTest(
+        "foo#{bar",
+        """Regular String Part ('foo')
+          |Expression lbrace ('#{')
+          |Identifier ('bar')""".trimMargin()
+    )
 
     fun testTwoLBraces() = doTest(
         "foo#{#{",
@@ -53,6 +86,4 @@ class LexerTest : LexerTestCase() {
 //        "#{json'foo','bar'}",
 //        """"""
 //    )
-
-    private fun doFileTest() = doFileTest("faker")
 }
