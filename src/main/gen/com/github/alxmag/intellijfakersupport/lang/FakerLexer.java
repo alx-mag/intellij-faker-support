@@ -7,7 +7,6 @@ import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes;
 import com.intellij.psi.TokenType;
-import com.intellij.util.containers.Stack;
 
 
 /**
@@ -28,6 +27,7 @@ class FakerLexer implements FlexLexer {
   public static final int IN_PARAM = 2;
   public static final int IN_FUNCTION_ARGS = 4;
   public static final int IN_EXPRESSION = 6;
+  public static final int IN_PARAM_EXPRESSION = 8;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -36,7 +36,7 @@ class FakerLexer implements FlexLexer {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = { 
-     0,  0,  1,  1,  2,  2,  3, 3
+     0,  0,  1,  1,  2,  2,  3,  3,  4, 4
   };
 
   /** 
@@ -202,12 +202,12 @@ class FakerLexer implements FlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\1\3\0\4\1\1\2\1\3\1\4\1\5\1\6"+
+    "\1\1\4\0\4\1\1\2\1\3\1\4\1\5\1\6"+
     "\1\7\1\10\1\11\1\1\1\12\1\13\1\14\1\15"+
-    "\1\16";
+    "\1\16\1\17";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[22];
+    int [] result = new int[24];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -233,11 +233,11 @@ class FakerLexer implements FlexLexer {
 
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\14\0\30\0\44\0\60\0\74\0\110\0\124"+
-    "\0\74\0\74\0\110\0\74\0\74\0\74\0\140\0\154"+
-    "\0\170\0\74\0\74\0\74\0\74\0\74";
+    "\0\140\0\110\0\110\0\124\0\110\0\110\0\110\0\154"+
+    "\0\170\0\204\0\110\0\110\0\110\0\110\0\110\0\110";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[22];
+    int [] result = new int[24];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -260,16 +260,18 @@ class FakerLexer implements FlexLexer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\6\1\1\5\5\1\1\6\2\7\2\6\1\7\1\10"+
-    "\3\6\1\11\1\6\1\12\2\13\2\12\1\13\1\6"+
-    "\2\12\1\14\1\15\1\16\1\12\1\13\1\17\1\20"+
-    "\1\12\1\13\1\21\1\12\1\22\1\23\1\12\1\16"+
-    "\6\1\1\5\1\24\4\1\15\0\2\13\2\0\1\13"+
-    "\6\0\6\6\1\0\1\25\4\6\1\0\1\13\1\17"+
-    "\2\0\1\13\11\0\3\20\15\0\1\26\4\0";
+    "\6\1\1\6\5\1\1\7\2\10\2\7\1\10\1\11"+
+    "\3\7\1\12\1\7\1\13\2\14\2\13\1\14\1\7"+
+    "\2\13\1\15\1\16\1\17\1\13\1\14\1\20\1\21"+
+    "\1\13\1\14\1\22\1\13\1\23\1\24\1\13\1\17"+
+    "\1\13\2\14\1\21\1\13\1\14\1\7\1\13\1\23"+
+    "\1\25\1\13\1\17\6\1\1\6\1\26\4\1\15\0"+
+    "\2\14\2\0\1\14\6\0\6\7\1\0\1\27\4\7"+
+    "\1\0\1\14\1\20\2\0\1\14\11\0\3\21\15\0"+
+    "\1\30\4\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[132];
+    int [] result = new int[144];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -307,11 +309,11 @@ class FakerLexer implements FlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\1\3\0\1\1\1\11\2\1\2\11\1\1\3\11"+
-    "\3\1\5\11";
+    "\1\1\4\0\1\1\1\11\2\1\2\11\1\1\3\11"+
+    "\3\1\6\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[22];
+    int [] result = new int[24];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -365,20 +367,6 @@ class FakerLexer implements FlexLexer {
 
   /** denotes if the user-EOF-code has already been executed */
   private boolean zzEOFDone;
-
-  /* user code: */
-    boolean nestedExpression = false;
-
-    private Stack<Integer> stack = new Stack<>();
-
-    public void yypushState(int newState) {
-      stack.push(yystate());
-      yybegin(newState);
-    }
-
-    public void yypopState() {
-      yybegin(stack.pop());
-    }
 
 
   /**
@@ -642,78 +630,86 @@ class FakerLexer implements FlexLexer {
             { return FakerTypes.REGULAR_STRING_PART;
             } 
             // fall through
-          case 15: break;
+          case 16: break;
           case 2: 
-            { yybegin(IN_FUNCTION_ARGS); return FakerTypes.PARAM_END;
+            { yybegin(IN_FUNCTION_ARGS);
+                        return FakerTypes.PARAM_END;
             } 
             // fall through
-          case 16: break;
+          case 17: break;
           case 3: 
             { return TokenType.BAD_CHARACTER;
             } 
             // fall through
-          case 17: break;
+          case 18: break;
           case 4: 
             { return TokenType.WHITE_SPACE;
             } 
             // fall through
-          case 18: break;
-          case 5: 
-            { yybegin(YYINITIAL); return FakerTypes.EXPRESSION_RBRACE;
-            } 
-            // fall through
           case 19: break;
-          case 6: 
-            { yybegin(IN_PARAM); return FakerTypes.PARAM_BEGIN;
+          case 5: 
+            { yybegin(YYINITIAL);
+           return FakerTypes.EXPRESSION_RBRACE;
             } 
             // fall through
           case 20: break;
+          case 6: 
+            { yybegin(IN_PARAM);
+           return FakerTypes.PARAM_BEGIN;
+            } 
+            // fall through
+          case 21: break;
           case 7: 
             { return FakerTypes.COMMA;
             } 
             // fall through
-          case 21: break;
+          case 22: break;
           case 8: 
-            { yybegin(IN_FUNCTION_ARGS); return FakerTypes.PARAMS_LIST_BEGIN;
+            { yybegin(IN_FUNCTION_ARGS);
+                      return FakerTypes.PARAMS_LIST_BEGIN;
             } 
             // fall through
-          case 22: break;
+          case 23: break;
           case 9: 
             { return FakerTypes.IDENTIFIER;
             } 
             // fall through
-          case 23: break;
+          case 24: break;
           case 10: 
             { return FakerTypes.DOT;
             } 
             // fall through
-          case 24: break;
+          case 25: break;
           case 11: 
-            { if (nestedExpression) { nestedExpression = false; yybegin(IN_PARAM); }
-                      else yybegin(YYINITIAL);
+            { yybegin(YYINITIAL);
                       return FakerTypes.EXPRESSION_RBRACE;
             } 
             // fall through
-          case 25: break;
+          case 26: break;
           case 12: 
+            { yybegin(IN_PARAM);
+                    return FakerTypes.EXPRESSION_RBRACE;
+            } 
+            // fall through
+          case 27: break;
+          case 13: 
             { yypushback(2);
                        yybegin(IN_EXPRESSION);
                        return FakerTypes.REGULAR_STRING_PART;
             } 
             // fall through
-          case 26: break;
-          case 13: 
-            { nestedExpression = true;
-                        yybegin(IN_EXPRESSION);
+          case 28: break;
+          case 14: 
+            { yybegin(IN_PARAM_EXPRESSION);
                         return FakerTypes.EXPRESSION_LBRACE;
             } 
             // fall through
-          case 27: break;
-          case 14: 
+          case 29: break;
+          case 15: 
             { return FakerTypes.EXPRESSION_LBRACE;
             } 
             // fall through
-          case 28: break;
+          case 30: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }
