@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="LanguageInjectionConfiguration">
+    <injection language="Faker" injector-id="java">
+        <display-name>Faker expression</display-name>
+        <place><![CDATA[
+            psiParameter().ofMethod(0, psiMethod()
+                    .withName("expression")
+                    .withParameters("java.lang.String")
+                    .definedInClass("net.datafaker.providers.base.BaseFaker"))
+        ]]></place>
+    </injection>
+</component>
