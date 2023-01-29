@@ -12,62 +12,62 @@ class LexerTest : LexerTestCase() {
 
     fun testValidCasesTemplate() = doTest(
         "my#regular @## #str,r,ing#{ident1.ident2 'foo', 'bar', '##{expr}', '#{expr2}'}#",
-        """Regular String Part ('my#regular @## #str,r,ing')
-          |Expression lbrace ('#{')
-          |Identifier ('ident1')
+        """REGULAR_STRING_PART ('my#regular @## #str,r,ing')
+          |#{ ('#{')
+          |IDENTIFIER ('ident1')
           |. ('.')
-          |Identifier ('ident2')
-          |Params list begin (' ')
-          |Param begin (''')
-          |Regular String Part ('foo')
-          |Param end (''')
+          |IDENTIFIER ('ident2')
+          |PARAMS_LIST_BEGIN (' ')
+          |PARAM_BEGIN (''')
+          |REGULAR_STRING_PART ('foo')
+          |' (''')
           |, (',')
           |WHITE_SPACE (' ')
-          |Param begin (''')
-          |Regular String Part ('bar')
-          |Param end (''')
+          |PARAM_BEGIN (''')
+          |REGULAR_STRING_PART ('bar')
+          |' (''')
           |, (',')
           |WHITE_SPACE (' ')
-          |Param begin (''')
-          |Regular String Part ('#')
-          |Expression lbrace ('#{')
-          |Identifier ('expr')
-          |Expression rbrace ('}')
-          |Param end (''')
+          |PARAM_BEGIN (''')
+          |REGULAR_STRING_PART ('#')
+          |#{ ('#{')
+          |IDENTIFIER ('expr')
+          |} ('}')
+          |' (''')
           |, (',')
           |WHITE_SPACE (' ')
-          |Param begin (''')
-          |Expression lbrace ('#{')
-          |Identifier ('expr2')
-          |Expression rbrace ('}')
-          |Param end (''')
-          |Expression rbrace ('}')
-          |Regular String Part ('#')""".trimMargin()
+          |PARAM_BEGIN (''')
+          |#{ ('#{')
+          |IDENTIFIER ('expr2')
+          |} ('}')
+          |' (''')
+          |} ('}')
+          |REGULAR_STRING_PART ('#')""".trimMargin()
     )
 
     fun testOnlyRegularStrings() = doTest(
         "my#regular @## #str,r,ing# ,",
-        """Regular String Part ('my#regular @## #str,r,ing# ,')""".trimMargin()
+        "REGULAR_STRING_PART ('my#regular @## #str,r,ing# ,')"
     )
 
     fun testUnclosedExpression() = doTest(
         "foo#{bar",
-        """Regular String Part ('foo')
-          |Expression lbrace ('#{')
-          |Identifier ('bar')""".trimMargin()
+        """REGULAR_STRING_PART ('foo')
+          |#{ ('#{')
+          |IDENTIFIER ('bar')""".trimMargin()
     )
 
     fun testTwoLBraces() = doTest(
         "foo#{#{",
-        """Regular String Part ('foo')
-          |Expression lbrace ('#{')
-          |Expression lbrace ('#{')""".trimMargin()
+        """REGULAR_STRING_PART ('foo')
+          |#{ ('#{')
+          |#{ ('#{')""".trimMargin()
     )
 
     fun testLBraceThenRegularString() = doTest(
         "foo#{123",
-        """Regular String Part ('foo')
-          |Expression lbrace ('#{')
+        """REGULAR_STRING_PART ('foo')
+          |#{ ('#{')
           |BAD_CHARACTER ('1')
           |BAD_CHARACTER ('2')
           |BAD_CHARACTER ('3')""".trimMargin()
@@ -75,10 +75,10 @@ class LexerTest : LexerTestCase() {
 
     fun testBadIdentifier() = doTest(
         "foo#{1}",
-        """Regular String Part ('foo')
-          |Expression lbrace ('#{')
+        """REGULAR_STRING_PART ('foo')
+          |#{ ('#{')
           |BAD_CHARACTER ('1')
-          |Expression rbrace ('}')""".trimMargin()
+          |} ('}')""".trimMargin()
     )
 
     // TODO

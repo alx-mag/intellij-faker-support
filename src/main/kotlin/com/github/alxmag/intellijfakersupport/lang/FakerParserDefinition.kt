@@ -1,11 +1,7 @@
 package com.github.alxmag.intellijfakersupport.lang
 
-import com.github.alxmag.intellijfakersupport.lang.parsing.FakerParser
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerFile
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes
-import com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerExpressionLBrace
-import com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerExpressionRBrace
-import com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerString
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
 import com.intellij.lang.PsiParser
@@ -27,13 +23,15 @@ class FakerParserDefinition : ParserDefinition {
 
     override fun getStringLiteralElements(): TokenSet = TokenSet.EMPTY
 
-    override fun createElement(node: ASTNode?): PsiElement {
-        return when (node?.elementType) {
-            FakerTypes.EXPRESSION_LBRACE -> FakerExpressionLBrace(node)
-            FakerTypes.EXPRESSION_RBRACE -> FakerExpressionRBrace(node)
-            FakerTypes.REGULAR_STRING_PART -> FakerString(node)
-            else -> throw AssertionError("Unknown type: " + node?.elementType)
-        }
+    override fun createElement(node: ASTNode): PsiElement {
+        return FakerTypes.Factory.createElement(node)
+
+//        return when (node.elementType) {
+//            FakerTypes.EXPRESSION_LBRACE -> FakerExpressionLBrace(node)
+//            FakerTypes.EXPRESSION_RBRACE -> FakerExpressionRBrace(node)
+//            FakerTypes.REGULAR_STRING_PART -> FakerString(node)
+//            else -> throw AssertionError("Unknown type: " + node.elementType)
+//        }
     }
 
     override fun createFile(viewProvider: FileViewProvider): PsiFile = FakerFile(viewProvider)

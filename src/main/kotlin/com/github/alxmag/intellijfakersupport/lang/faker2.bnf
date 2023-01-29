@@ -19,29 +19,37 @@
     EXPRESSION_LBRACE='#{'
     EXPRESSION_RBRACE='}'
 
+    PARAM_BEGIN = "'"
+    PARAM_END = "'"
+
     DOT='.'
     COMMA=','
-    SINGLE_QUOTE="'"
 
-    ARGS_PREFIX="regexp:(\s)*"
+    PARAMS_LIST_BEGIN="regexp:(\s)+"
 
     IDENTIFIER="regexp:[a-zA-Z]+[a-zA-Z0-9]+"
   ]
+
+  extends("paramLiteral|paramExpression")=param
 }
 
 fakerFile ::= (regularString | expression)*
-fakerFile ::= (expression)*
-regularString ::= (REGULAR_STRING_PART)+
-expression ::= EXPRESSION_LBRACE functionName argsPart? EXPRESSION_RBRACE {
+regularString ::= (REGULAR_STRING_PART)+ | ""
+expression ::= EXPRESSION_LBRACE functionName paramsList? EXPRESSION_RBRACE {
   pin=1
 }
 functionName ::= IDENTIFIER (DOT IDENTIFIER)*
-private argsPart ::= argsList
-private argsList ::= ARGS_PREFIX arg* {
+private paramsList ::= PARAMS_LIST_BEGIN quotedParam* {
   pin=1
 }
-arg ::= "'" REGULAR_STRING_PART* "'" (','|&'}') {
+private quotedParam ::= PARAM_BEGIN param PARAM_END (','|&'}') {
+  pin=1
+  recoverWhile=not_rbrace_or_next_quoted_param
+}
+param ::= paramLiteral | paramExpression
+paramLiteral ::= (REGULAR_STRING_PART)+ | ""
+paramExpression ::= EXPRESSION_LBRACE functionName EXPRESSION_RBRACE {
   pin=1
 }
 
-private not_brace_or_next_arg ::= !('}'|arg)
+private not_rbrace_or_next_quoted_param ::= !('}'|quotedParam)
