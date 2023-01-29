@@ -8,10 +8,6 @@ import com.intellij.testFramework.TestDataPath
 class FakerParsingTest : ParsingTestCase("parsing", "faker", true, FakerParserDefinition()) {
     override fun getTestDataPath(): String = "src/test/testData"
 
-    override fun getName(): String {
-        return super.getName()
-    }
-
     fun testRegularStringOnly() = doTest(true)
 
     fun testStringExprString() = doTest(true)
@@ -20,6 +16,9 @@ class FakerParsingTest : ParsingTestCase("parsing", "faker", true, FakerParserDe
 
     fun testDoubleExpr() = doTest(true)
 
-    // TODO
-//    fun testExprWithStringArg() = doTest(true)
+    fun testExprWithStringArg() = doTest(true)
+
+    fun testExprWith2Args() = doTest(true)
+
+    fun testExprWithEmptyStringArg() = doTest(true)
 }

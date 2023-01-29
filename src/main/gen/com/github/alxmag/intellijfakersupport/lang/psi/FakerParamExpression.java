@@ -3,7 +3,7 @@ package com.github.alxmag.intellijfakersupport.lang.psi;
 
 import org.jetbrains.annotations.Nullable;
 
-public interface FakerParamExpression extends FakerParam {
+public interface FakerParamExpression extends FakerParamStatement {
 
   @Nullable
   FakerFunctionName getFunctionName();

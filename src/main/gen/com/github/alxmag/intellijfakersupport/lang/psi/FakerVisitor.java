@@ -11,6 +11,10 @@ public class FakerVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitExpressionParamsList(@NotNull FakerExpressionParamsList o) {
+    visitPsiElement(o);
+  }
+
   public void visitFunctionName(@NotNull FakerFunctionName o) {
     visitPsiElement(o);
   }
@@ -20,11 +24,15 @@ public class FakerVisitor extends PsiElementVisitor {
   }
 
   public void visitParamExpression(@NotNull FakerParamExpression o) {
-    visitParam(o);
+    visitParamStatement(o);
   }
 
   public void visitParamLiteral(@NotNull FakerParamLiteral o) {
-    visitParam(o);
+    visitParamStatement(o);
+  }
+
+  public void visitParamStatement(@NotNull FakerParamStatement o) {
+    visitPsiElement(o);
   }
 
   public void visitPsiElement(@NotNull PsiElement o) {

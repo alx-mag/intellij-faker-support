@@ -4,10 +4,14 @@ package com.github.alxmag.intellijfakersupport.lang.psi.impl;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerParamLiteral;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerVisitor;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class FakerParamLiteralImpl extends FakerParamImpl implements FakerParamLiteral {
+import static com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes.REGULAR_STRING_PART;
+
+public class FakerParamLiteralImpl extends FakerParamStatementImpl implements FakerParamLiteral {
 
   public FakerParamLiteralImpl(@NotNull ASTNode node) {
     super(node);
@@ -22,6 +26,12 @@ public class FakerParamLiteralImpl extends FakerParamImpl implements FakerParamL
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof FakerVisitor) accept((FakerVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRegularStringPart() {
+    return findChildByType(REGULAR_STRING_PART);
   }
 
 }

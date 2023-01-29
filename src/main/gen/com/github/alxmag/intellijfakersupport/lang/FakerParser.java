@@ -37,11 +37,11 @@ public class FakerParser implements PsiParser, LightPsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(PARAM, PARAM_EXPRESSION, PARAM_LITERAL),
+    create_token_set_(PARAM_EXPRESSION, PARAM_LITERAL, PARAM_STATEMENT),
   };
 
   /* ********************************************************** */
-  // EXPRESSION_LBRACE functionName paramsList? EXPRESSION_RBRACE
+  // EXPRESSION_LBRACE functionName paramsListDeclaration? EXPRESSION_RBRACE
   public static boolean expression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "expression")) return false;
     if (!nextTokenIs(b, EXPRESSION_LBRACE)) return false;
@@ -56,20 +56,34 @@ public class FakerParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // paramsList?
+  // paramsListDeclaration?
   private static boolean expression_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "expression_2")) return false;
-    paramsList(b, l + 1);
+    paramsListDeclaration(b, l + 1);
     return true;
   }
 
   /* ********************************************************** */
-  // value_*
+  // paramDeclaration*
+  public static boolean expressionParamsList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "expressionParamsList")) return false;
+    Marker m = enter_section_(b, l, _NONE_, EXPRESSION_PARAMS_LIST, "<expression params list>");
+    while (true) {
+      int c = current_position_(b);
+      if (!paramDeclaration(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "expressionParamsList", c)) break;
+    }
+    exit_section_(b, l, m, true, false, null);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // template_part_*
   static boolean fakerFile(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "fakerFile")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!value_(b, l + 1)) break;
+      if (!template_part_(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "fakerFile", c)) break;
     }
     return true;
@@ -110,35 +124,72 @@ public class FakerParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !('}'|quotedParam)
-  static boolean not_rbrace_or_next_quoted_param(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "not_rbrace_or_next_quoted_param")) return false;
+  // !('}'|paramDeclaration)
+  static boolean not_rbrace_or_next_param_declaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "not_rbrace_or_next_param_declaration")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NOT_);
-    r = !not_rbrace_or_next_quoted_param_0(b, l + 1);
+    r = !not_rbrace_or_next_param_declaration_0(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // '}'|quotedParam
-  private static boolean not_rbrace_or_next_quoted_param_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "not_rbrace_or_next_quoted_param_0")) return false;
+  // '}'|paramDeclaration
+  private static boolean not_rbrace_or_next_param_declaration_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "not_rbrace_or_next_param_declaration_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, EXPRESSION_RBRACE);
-    if (!r) r = quotedParam(b, l + 1);
+    if (!r) r = paramDeclaration(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
-  // paramLiteral | paramExpression
+  // PARAM_BEGIN paramStatement PARAM_END
   public static boolean param(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "param")) return false;
+    if (!nextTokenIs(b, PARAM_BEGIN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, PARAM, null);
+    r = consumeToken(b, PARAM_BEGIN);
+    p = r; // pin = 1
+    r = r && report_error_(b, paramStatement(b, l + 1));
+    r = p && consumeToken(b, PARAM_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // param (','|&'}')
+  static boolean paramDeclaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "paramDeclaration")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = param(b, l + 1);
+    p = r; // pin = 1
+    r = r && paramDeclaration_1(b, l + 1);
+    exit_section_(b, l, m, r, p, FakerParser::not_rbrace_or_next_param_declaration);
+    return r || p;
+  }
+
+  // ','|&'}'
+  private static boolean paramDeclaration_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "paramDeclaration_1")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _COLLAPSE_, PARAM, "<param>");
-    r = paramLiteral(b, l + 1);
-    if (!r) r = paramExpression(b, l + 1);
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    if (!r) r = paramDeclaration_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // &'}'
+  private static boolean paramDeclaration_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "paramDeclaration_1_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _AND_);
+    r = consumeToken(b, EXPRESSION_RBRACE);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -159,97 +210,45 @@ public class FakerParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (REGULAR_STRING_PART)+ | ""
+  // REGULAR_STRING_PART?
   public static boolean paramLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "paramLiteral")) return false;
-    boolean r;
     Marker m = enter_section_(b, l, _NONE_, PARAM_LITERAL, "<param literal>");
-    r = paramLiteral_0(b, l + 1);
-    if (!r) r = consumeToken(b, "");
+    consumeToken(b, REGULAR_STRING_PART);
+    exit_section_(b, l, m, true, false, null);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // paramExpression | paramLiteral
+  public static boolean paramStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "paramStatement")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _COLLAPSE_, PARAM_STATEMENT, "<param statement>");
+    r = paramExpression(b, l + 1);
+    if (!r) r = paramLiteral(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // (REGULAR_STRING_PART)+
-  private static boolean paramLiteral_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "paramLiteral_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, REGULAR_STRING_PART);
-    while (r) {
-      int c = current_position_(b);
-      if (!consumeToken(b, REGULAR_STRING_PART)) break;
-      if (!empty_element_parsed_guard_(b, "paramLiteral_0", c)) break;
-    }
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
   /* ********************************************************** */
-  // PARAMS_LIST_BEGIN quotedParam*
-  static boolean paramsList(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "paramsList")) return false;
+  // PARAMS_LIST_BEGIN expressionParamsList
+  static boolean paramsListDeclaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "paramsListDeclaration")) return false;
     if (!nextTokenIs(b, PARAMS_LIST_BEGIN)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, PARAMS_LIST_BEGIN);
     p = r; // pin = 1
-    r = r && paramsList_1(b, l + 1);
+    r = r && expressionParamsList(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // quotedParam*
-  private static boolean paramsList_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "paramsList_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!quotedParam(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "paramsList_1", c)) break;
-    }
-    return true;
-  }
-
-  /* ********************************************************** */
-  // PARAM_BEGIN param PARAM_END (','|&'}')
-  static boolean quotedParam(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "quotedParam")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = consumeToken(b, PARAM_BEGIN);
-    p = r; // pin = 1
-    r = r && report_error_(b, param(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, PARAM_END)) && r;
-    r = p && quotedParam_3(b, l + 1) && r;
-    exit_section_(b, l, m, r, p, FakerParser::not_rbrace_or_next_quoted_param);
-    return r || p;
-  }
-
-  // ','|&'}'
-  private static boolean quotedParam_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "quotedParam_3")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    if (!r) r = quotedParam_3_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // &'}'
-  private static boolean quotedParam_3_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "quotedParam_3_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _AND_);
-    r = consumeToken(b, EXPRESSION_RBRACE);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
   /* ********************************************************** */
   // REGULAR_STRING_PART|expression
-  static boolean value_(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "value_")) return false;
+  static boolean template_part_(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "template_part_")) return false;
     if (!nextTokenIs(b, "", EXPRESSION_LBRACE, REGULAR_STRING_PART)) return false;
     boolean r;
     r = consumeToken(b, REGULAR_STRING_PART);

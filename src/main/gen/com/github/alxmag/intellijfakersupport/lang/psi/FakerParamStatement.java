@@ -2,11 +2,7 @@
 package com.github.alxmag.intellijfakersupport.lang.psi;
 
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.Nullable;
 
-public interface FakerParamLiteral extends FakerParamStatement {
-
-  @Nullable
-  PsiElement getRegularStringPart();
+public interface FakerParamStatement extends PsiElement {
 
 }

@@ -8,6 +8,6 @@ FILE
       FakerParamImpl(PARAM)
         PsiElement(PARAM_BEGIN)(''')
         FakerParamLiteralImpl(PARAM_LITERAL)
-          PsiElement(REGULAR_STRING_PART)('arg1')
+          <empty list>
         PsiElement(PARAM_END)(''')
     PsiElement(})('}')

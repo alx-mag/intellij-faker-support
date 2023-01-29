@@ -2,18 +2,15 @@
 package com.github.alxmag.intellijfakersupport.lang.psi.impl;
 
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerExpression;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerExpressionParamsList;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerFunctionName;
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerParam;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerVisitor;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 import static com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes.PARAMS_LIST_BEGIN;
 
@@ -35,14 +32,14 @@ public class FakerExpressionImpl extends ASTWrapperPsiElement implements FakerEx
 
   @Override
   @Nullable
-  public FakerFunctionName getFunctionName() {
-    return findChildByClass(FakerFunctionName.class);
+  public FakerExpressionParamsList getExpressionParamsList() {
+    return findChildByClass(FakerExpressionParamsList.class);
   }
 
   @Override
-  @NotNull
-  public List<FakerParam> getParamList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FakerParam.class);
+  @Nullable
+  public FakerFunctionName getFunctionName() {
+    return findChildByClass(FakerFunctionName.class);
   }
 
   @Override

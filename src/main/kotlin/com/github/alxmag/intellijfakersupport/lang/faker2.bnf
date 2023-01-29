@@ -1,4 +1,3 @@
-
 {
   parserClass="com.github.alxmag.intellijfakersupport.lang.FakerParser"
   parserUtilClass="com.github.alxmag.intellijfakersupport.lang.FakerParserUtil"
@@ -19,8 +18,8 @@
     EXPRESSION_LBRACE='#{'
     EXPRESSION_RBRACE='}'
 
-    PARAM_BEGIN = "'"
-    PARAM_END = "'"
+    // PARAM_BEGIN = "'"
+    // PARAM_END = "'"
 
     DOT='.'
     COMMA=','
@@ -30,27 +29,32 @@
     IDENTIFIER="regexp:[a-zA-Z]+[a-zA-Z0-9]+"
   ]
 
-  extends("paramLiteral|paramExpression")=param
+  extends("paramLiteral|paramExpression")=paramStatement
 }
 
-fakerFile ::= value_*
-private value_ ::= (REGULAR_STRING_PART|expression)
-//private regularString ::= (REGULAR_STRING_PART)+
-expression ::= EXPRESSION_LBRACE functionName paramsList? EXPRESSION_RBRACE {
+fakerFile ::= template_part_*
+private template_part_ ::= (REGULAR_STRING_PART|expression)
+expression ::= EXPRESSION_LBRACE functionName paramsListDeclaration? EXPRESSION_RBRACE {
   pin=1
 }
 functionName ::= IDENTIFIER (DOT IDENTIFIER)*
-private paramsList ::= PARAMS_LIST_BEGIN quotedParam* {
+
+private paramsListDeclaration ::= PARAMS_LIST_BEGIN expressionParamsList {
   pin=1
 }
-private quotedParam ::= PARAM_BEGIN param PARAM_END (','|&'}') {
+expressionParamsList ::= paramDeclaration*
+
+private paramDeclaration ::= param (','|&'}') {
   pin=1
-  recoverWhile=not_rbrace_or_next_quoted_param
+  recoverWhile=not_rbrace_or_next_param_declaration
 }
-param ::= paramLiteral | paramExpression
-paramLiteral ::= (REGULAR_STRING_PART)+ | ""
+param ::= PARAM_BEGIN paramStatement PARAM_END {
+  pin=1
+}
+paramStatement ::= paramExpression | paramLiteral
+paramLiteral ::= REGULAR_STRING_PART?
 paramExpression ::= EXPRESSION_LBRACE functionName EXPRESSION_RBRACE {
   pin=1
 }
 
-private not_rbrace_or_next_quoted_param ::= !('}'|quotedParam)
+private not_rbrace_or_next_param_declaration ::= !('}'|paramDeclaration)
