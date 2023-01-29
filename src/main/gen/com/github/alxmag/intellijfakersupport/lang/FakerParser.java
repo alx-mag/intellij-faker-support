@@ -64,24 +64,15 @@ public class FakerParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (regularString | expression)*
+  // value_*
   static boolean fakerFile(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "fakerFile")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!fakerFile_0(b, l + 1)) break;
+      if (!value_(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "fakerFile", c)) break;
     }
     return true;
-  }
-
-  // regularString | expression
-  private static boolean fakerFile_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "fakerFile_0")) return false;
-    boolean r;
-    r = regularString(b, l + 1);
-    if (!r) r = expression(b, l + 1);
-    return r;
   }
 
   /* ********************************************************** */
@@ -256,29 +247,13 @@ public class FakerParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (REGULAR_STRING_PART)+ | ""
-  public static boolean regularString(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "regularString")) return false;
+  // REGULAR_STRING_PART|expression
+  static boolean value_(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "value_")) return false;
+    if (!nextTokenIs(b, "", EXPRESSION_LBRACE, REGULAR_STRING_PART)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, REGULAR_STRING, "<regular string>");
-    r = regularString_0(b, l + 1);
-    if (!r) r = consumeToken(b, "");
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // (REGULAR_STRING_PART)+
-  private static boolean regularString_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "regularString_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
     r = consumeToken(b, REGULAR_STRING_PART);
-    while (r) {
-      int c = current_position_(b);
-      if (!consumeToken(b, REGULAR_STRING_PART)) break;
-      if (!empty_element_parsed_guard_(b, "regularString_0", c)) break;
-    }
-    exit_section_(b, m, null, r);
+    if (!r) r = expression(b, l + 1);
     return r;
   }
 

@@ -1,0 +1,2 @@
+FILE
+  PsiElement(REGULAR_STRING_PART)('my#regular @## #str,r,ing')

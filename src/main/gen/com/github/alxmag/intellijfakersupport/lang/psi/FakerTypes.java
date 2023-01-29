@@ -1,7 +1,10 @@
 // This is a generated file. Not intended for manual editing.
 package com.github.alxmag.intellijfakersupport.lang.psi;
 
-import com.github.alxmag.intellijfakersupport.lang.psi.impl.*;
+import com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerExpressionImpl;
+import com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerFunctionNameImpl;
+import com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerParamExpressionImpl;
+import com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerParamLiteralImpl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
@@ -13,7 +16,6 @@ public interface FakerTypes {
   IElementType PARAM = new FakerElementType("PARAM");
   IElementType PARAM_EXPRESSION = new FakerElementType("PARAM_EXPRESSION");
   IElementType PARAM_LITERAL = new FakerElementType("PARAM_LITERAL");
-  IElementType REGULAR_STRING = new FakerElementType("REGULAR_STRING");
 
   IElementType COMMA = new FakerTokenType(",");
   IElementType DOT = new FakerTokenType(".");
@@ -39,9 +41,6 @@ public interface FakerTypes {
       }
       else if (type == PARAM_LITERAL) {
         return new FakerParamLiteralImpl(node);
-      }
-      else if (type == REGULAR_STRING) {
-        return new FakerRegularStringImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

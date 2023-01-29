@@ -33,8 +33,9 @@
   extends("paramLiteral|paramExpression")=param
 }
 
-fakerFile ::= (regularString | expression)*
-regularString ::= (REGULAR_STRING_PART)+ | ""
+fakerFile ::= value_*
+private value_ ::= (REGULAR_STRING_PART|expression)
+//private regularString ::= (REGULAR_STRING_PART)+
 expression ::= EXPRESSION_LBRACE functionName paramsList? EXPRESSION_RBRACE {
   pin=1
 }

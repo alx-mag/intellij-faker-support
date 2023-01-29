@@ -1,0 +1,8 @@
+FILE
+  PsiElement(REGULAR_STRING_PART)('foo')
+  FakerExpressionImpl(EXPRESSION)
+    PsiElement(#{)('#{')
+    FakerFunctionNameImpl(FUNCTION_NAME)
+      PsiElement(IDENTIFIER)('expr')
+    PsiElement(})('}')
+  PsiElement(REGULAR_STRING_PART)('bar')

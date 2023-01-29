@@ -1,0 +1,11 @@
+FILE
+  FakerExpressionImpl(EXPRESSION)
+    PsiElement(#{)('#{')
+    FakerFunctionNameImpl(FUNCTION_NAME)
+      PsiElement(IDENTIFIER)('fooExpr')
+    PsiElement(})('}')
+  FakerExpressionImpl(EXPRESSION)
+    PsiElement(#{)('#{')
+    FakerFunctionNameImpl(FUNCTION_NAME)
+      PsiElement(IDENTIFIER)('barExpr')
+    PsiElement(})('}')

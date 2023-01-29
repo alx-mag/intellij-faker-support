@@ -27,10 +27,6 @@ public class FakerVisitor extends PsiElementVisitor {
     visitParam(o);
   }
 
-  public void visitRegularString(@NotNull FakerRegularString o) {
-    visitPsiElement(o);
-  }
-
   public void visitPsiElement(@NotNull PsiElement o) {
     visitElement(o);
   }
