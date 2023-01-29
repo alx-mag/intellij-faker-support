@@ -1,15 +1,13 @@
 package com.github.alxmag.intellijfakersupport
 
 import com.intellij.ide.highlighter.XmlFileType
-import com.intellij.openapi.components.service
 import com.intellij.psi.xml.XmlFile
 import com.intellij.testFramework.TestDataPath
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.util.PsiErrorElementUtil
-import com.github.alxmag.intellijfakersupport.services.MyProjectService
 
 @TestDataPath("\$CONTENT_ROOT/testData")
-class MyPluginTest : BasePlatformTestCase() {
+class SampleTest : BasePlatformTestCase() {
 
     fun testXMLFile() {
         val psiFile = myFixture.configureByText(XmlFileType.INSTANCE, "<foo>bar</foo>")

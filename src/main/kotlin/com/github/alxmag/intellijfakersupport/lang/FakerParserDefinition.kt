@@ -23,16 +23,7 @@ class FakerParserDefinition : ParserDefinition {
 
     override fun getStringLiteralElements(): TokenSet = TokenSet.EMPTY
 
-    override fun createElement(node: ASTNode): PsiElement {
-        return FakerTypes.Factory.createElement(node)
-
-//        return when (node.elementType) {
-//            FakerTypes.EXPRESSION_LBRACE -> FakerExpressionLBrace(node)
-//            FakerTypes.EXPRESSION_RBRACE -> FakerExpressionRBrace(node)
-//            FakerTypes.REGULAR_STRING_PART -> FakerString(node)
-//            else -> throw AssertionError("Unknown type: " + node.elementType)
-//        }
-    }
+    override fun createElement(node: ASTNode): PsiElement = FakerTypes.Factory.createElement(node)
 
     override fun createFile(viewProvider: FileViewProvider): PsiFile = FakerFile(viewProvider)
     companion object {

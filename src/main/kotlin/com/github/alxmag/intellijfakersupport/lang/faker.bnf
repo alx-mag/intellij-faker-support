@@ -14,61 +14,47 @@
   tokenTypeClass="com.github.alxmag.intellijfakersupport.lang.psi.FakerTokenType"
 
   tokens = [
-    REGULAR_STRING_PART="regexp:([^\\\"#])+"
-    HASH='#'
-    EXPRESSION_LBRACE='{'
+    REGULAR_STRING_PART="regexp:(([^\\\"\#]) | (#[^{]))"
+    EXPRESSION_LBRACE='#{'
     EXPRESSION_RBRACE='}'
+
+    // PARAM_BEGIN = "'"
+    // PARAM_END = "'"
 
     DOT='.'
     COMMA=','
-    COLON=':'
-    SINGLE_QUOTE="'"
 
-    ARGS_PREFIX="regexp:\s+"
+    PARAMS_LIST_BEGIN="regexp:(\s)+"
 
-    SINGLE_QUOTED_STRING="regexp:'([^\\'\r\n]|\\[^\r\n])*'?"
-
-    SINGLE_QUOTED_EXPR="regexp:'#\{([^\\'\r\n]|\\[^\r\n])}*'?"
-//        STRING='regexp:"([^\\"\r\n]|\\([\\"/bfnrt]|u[a-fA-F0-9]{4}))*"?'
-
-    NUMBER='regexp:-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d*)?'
-    // Actually not defined in RFC 4627, but may be used for JSON5 and helps with
-    // auto completion of keywords. Semantically, it represents "bad word" type
-    // of tokens
-    // Could be as loose as [^\s\[\]{}:,\"\']+, but is slightly more restricted
-    // for the time being to match most forms of npm package names and semver versions
-    // in package.json.
-    // See https://github.com/npm/validate-npm-package-name
-//    IDENTIFIER="regexp:[[:jletterdigit:]~!()*\-./@\^<>=]+"
-    IDENTIFIER="regexp:[a-zA-Z]+[a-zA-Z0-9]*"
+    IDENTIFIER="regexp:[a-zA-Z]+[a-zA-Z0-9]+"
   ]
+
+  extends("paramLiteral|paramExpression")=paramStatement
 }
 
-fakerFile ::= regularString* expression*
-regularString ::= (REGULAR_STRING_PART)+
-//expression ::= HASH EXPRESSION_LBRACE functionName EXPRESSION_RBRACE
-expression ::= HASH EXPRESSION_LBRACE {
+fakerFile ::= template_part_*
+private template_part_ ::= (REGULAR_STRING_PART|expression)
+expression ::= EXPRESSION_LBRACE functionName paramsListDeclaration? EXPRESSION_RBRACE {
   pin=1
-  recoverWhile = not_brace_or_next_arg
 }
 functionName ::= IDENTIFIER (DOT IDENTIFIER)*
 
-//private expression ::= '#{' functionName args? '}'
-//private expression ::= NUMBER* expressionD
-//
-//expressionD ::= '#{' functionName '}'
-//args ::= ARGS_PREFIX argsList
-//argsList ::= arg* (','|&'}') {
-//  recoverWhile = not_brace_or_next_arg
-//  pin=1
-//}
+private paramsListDeclaration ::= PARAMS_LIST_BEGIN expressionParamsList {
+  pin=1
+}
+expressionParamsList ::= paramDeclaration*
 
-//arg ::= SINGLE_QUOTED_STRING | SINGLE_QUOTED_EXPR
-//arg ::= SINGLE_QUOTE '#{' functionName '}' SINGLE_QUOTE
-//arg ::= SINGLE_QUOTE 'fooz' SINGLE_QUOTE
+private paramDeclaration ::= param (','|&'}') {
+  pin=1
+  recoverWhile=not_rbrace_or_next_param_declaration
+}
+param ::= PARAM_BEGIN paramStatement PARAM_END {
+  pin=1
+}
+paramStatement ::= paramExpression | paramLiteral
+paramLiteral ::= REGULAR_STRING_PART?
+paramExpression ::= EXPRESSION_LBRACE functionName EXPRESSION_RBRACE {
+  pin=1
+}
 
-//args ::= param (param ",")*
-//
-//param ::= "'" STRING_LITERAL "'"
-
-private not_brace_or_next_arg ::= !('}'|arg)
+private not_rbrace_or_next_param_declaration ::= !('}'|paramDeclaration)
