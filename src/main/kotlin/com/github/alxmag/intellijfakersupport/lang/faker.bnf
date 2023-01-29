@@ -9,6 +9,8 @@
   psiPackage="com.github.alxmag.intellijfakersupport.lang.psi"
   psiImplPackage="com.github.alxmag.intellijfakersupport.lang.psi.impl"
 
+  psiImplUtilClass="com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerPsiImplUtil"
+
   elementTypeHolderClass="com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes"
   elementTypeClass="com.github.alxmag.intellijfakersupport.lang.psi.FakerElementType"
   tokenTypeClass="com.github.alxmag.intellijfakersupport.lang.psi.FakerTokenType"
@@ -30,6 +32,7 @@
   ]
 
   extends("paramLiteral|paramExpression")=paramStatement
+
 }
 
 fakerFile ::= template_part_*
@@ -37,7 +40,9 @@ private template_part_ ::= (REGULAR_STRING_PART|expression)
 expression ::= EXPRESSION_LBRACE functionName paramsListDeclaration? EXPRESSION_RBRACE {
   pin=1
 }
-functionName ::= IDENTIFIER (DOT IDENTIFIER)*
+functionName ::= IDENTIFIER (DOT IDENTIFIER)* {
+  methods=[getFunctionName]
+}
 
 private paramsListDeclaration ::= PARAMS_LIST_BEGIN expressionParamsList {
   pin=1
