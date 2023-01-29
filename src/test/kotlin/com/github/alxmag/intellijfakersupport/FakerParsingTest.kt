@@ -11,14 +11,12 @@ class FakerParsingTest : ParsingTestCase("parsing", "faker", true, FakerParserDe
     fun testRegularStringOnly() = doTest(true)
 
     fun testStringExprString() = doTest(true)
-
     fun testOnlyExpr() = doTest(true)
-
     fun testDoubleExpr() = doTest(true)
-
     fun testExprWithStringArg() = doTest(true)
-
     fun testExprWith2Args() = doTest(true)
-
     fun testExprWithEmptyStringArg() = doTest(true)
+
+    fun testExprWithExprParam() = doTest(true)
+    fun testExprWith2ExprParams() = doTest(true)
 }
