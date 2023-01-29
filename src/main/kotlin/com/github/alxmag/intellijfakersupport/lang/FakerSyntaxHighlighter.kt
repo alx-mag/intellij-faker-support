@@ -35,8 +35,6 @@ class FakerSyntaxHighlighter : SyntaxHighlighterBase() {
 
         val STRING_LITERAL = createTextAttributesKey("FAKER_LITERAL", DefaultLanguageHighlighterColors.STRING)
 
-        val EXPRESSION_LBRACE =
-            createTextAttributesKey("FAKER_EXPRESSION_LBRACE", DefaultLanguageHighlighterColors.BRACES)
         val EXPRESSION_RBRACE = createTextAttributesKey("FAKER_RBRACE", DefaultLanguageHighlighterColors.KEYWORD)
 
         val IDENTIFIER_KEYS = arrayOf(IDENTIFIER)
