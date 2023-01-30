@@ -9,7 +9,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
 
-        <fileType name="Faker Template File"
+        <fileType name="Faker"
                   implementationClass="com.github.alxmag.intellijfakersupport.lang.psi.FakerFileType"
                   language="Faker"
                   fieldName="INSTANCE"
@@ -19,6 +19,10 @@
                                        implementationClass="com.github.alxmag.intellijfakersupport.lang.FakerSyntaxHighlighterFactory"/>
         <lang.parserDefinition language="Faker"
                                implementationClass="com.github.alxmag.intellijfakersupport.lang.FakerParserDefinition"/>
+
+        <typedHandler implementation="com.github.alxmag.intellijfakersupport.lang.editor.FakerTypedHandler"/>
+        <quoteHandler className="com.github.alxmag.intellijfakersupport.lang.editor.FakerQuoteHandler"
+                      fileType="Faker"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.intellij.intelliLang">

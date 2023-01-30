@@ -6,7 +6,7 @@ import com.intellij.openapi.fileTypes.LanguageFileType
 import javax.swing.Icon
 
 class FakerFileType : LanguageFileType(FakerLanguage) {
-    override fun getName(): String = "Faker Template File"
+    override fun getName(): String = "Faker"
 
     override fun getDescription(): String = "Faker template file"
 
