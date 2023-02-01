@@ -23,6 +23,10 @@
         <typedHandler implementation="com.github.alxmag.intellijfakersupport.lang.editor.FakerTypedHandler"/>
         <quoteHandler className="com.github.alxmag.intellijfakersupport.lang.editor.FakerQuoteHandler"
                       fileType="Faker"/>
+
+        <completion.contributor
+                implementationClass="com.github.alxmag.intellijfakersupport.lang.codeinsight.FakerCompletionContributor"
+                language="Faker"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.intellij.intelliLang">

@@ -75,7 +75,8 @@ IDENTIFIER=[:jletter:] [:jletterdigit:]*
                         yybegin(IN_PARAM_EXPRESSION);
                         return FakerTypes.EXPRESSION_LBRACE;
                       }
-    (#[^{#]) | [^\']  { return FakerTypes.REGULAR_STRING_PART; }
+//    !("#{")  { return FakerTypes.REGULAR_STRING_PART; }
+    (#[^{#']) | [^\']  { return FakerTypes.REGULAR_STRING_PART; }
 }
 
 <IN_PARAM_EXPRESSION>
