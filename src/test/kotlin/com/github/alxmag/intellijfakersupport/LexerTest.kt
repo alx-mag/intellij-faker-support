@@ -120,6 +120,37 @@ class LexerTest : LexerTestCase() {
           |} ('}')""".trimMargin()
     )
 
+    fun testParametrizedNestedExpression2() = doTest(
+        "#{json 'obj' '#{json ''foo'', ''#{Name.foo}''}'}",
+        """REGULAR_STRING_PART ('')
+          |#{ ('#{')
+          |IDENTIFIER ('json')
+          |PARAMS_LIST_BEGIN (' ')
+          |PARAM_BEGIN (''')
+          |REGULAR_STRING_PART ('obj')
+          |PARAM_END (''')
+          |WHITE_SPACE (' ')
+          |PARAM_BEGIN (''')
+          |#{ ('#{')
+          |IDENTIFIER ('json')
+          |PARAMS_LIST_BEGIN (' ')
+          |PARAM_DOUBLE_QUOTE_BEGIN ('''')
+          |REGULAR_STRING_PART ('foo')
+          |PARAM_DOUBLE_QUOTE_END ('''')
+          |, (',')
+          |WHITE_SPACE (' ')
+          |PARAM_DOUBLE_QUOTE_BEGIN ('''')
+          |#{ ('#{')
+          |IDENTIFIER ('Name')
+          |. ('.')
+          |IDENTIFIER ('foo')
+          |} ('}')
+          |PARAM_DOUBLE_QUOTE_END ('''')
+          |} ('}')
+          |PARAM_END (''')
+          |} ('}')""".trimMargin()
+    )
+
     // TODO
 //    fun testNoSpaceBeforeArgs() = doTest(
 //        "#{json'foo','bar'}",
