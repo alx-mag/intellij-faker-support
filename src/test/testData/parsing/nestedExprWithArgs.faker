@@ -1,0 +1,1 @@
+#{fun '#{foo ''nestedParam'', ''nestedValue''}', '#{expr.bar}'}

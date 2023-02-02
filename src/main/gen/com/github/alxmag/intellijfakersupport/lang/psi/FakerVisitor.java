@@ -19,6 +19,14 @@ public class FakerVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitNestedExpressionParamsList(@NotNull FakerNestedExpressionParamsList o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNestedParam(@NotNull FakerNestedParam o) {
+    visitPsiElement(o);
+  }
+
   public void visitParam(@NotNull FakerParam o) {
     visitPsiElement(o);
   }

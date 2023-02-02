@@ -19,4 +19,6 @@ class FakerParsingTest : ParsingTestCase("parsing", "faker", true, FakerParserDe
 
     fun testExprWithExprParam() = doTest(true)
     fun testExprWith2ExprParams() = doTest(true)
+
+    fun testNestedExprWithArgs() = doTest(true)
 }

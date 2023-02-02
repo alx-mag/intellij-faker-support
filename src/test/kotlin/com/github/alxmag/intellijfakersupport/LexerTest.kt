@@ -6,7 +6,7 @@ import com.intellij.testFramework.LexerTestCase
 
 class LexerTest : LexerTestCase() {
     override fun createLexer(): Lexer = FakerLexerAdapter()
-    //    override fun createLexer(): Lexer = FakerFlexLexer()
+//        override fun createLexer(): Lexer = FakerFlexLexer()
     override fun getDirPath(): String  = throw UnsupportedOperationException()
 
 
@@ -84,13 +84,40 @@ class LexerTest : LexerTestCase() {
     fun testHashesAsParams() = doTest(
         "#{bothify '###'}",
         """REGULAR_STRING_PART ('')
-                   |#{ ('#{')
-                   |IDENTIFIER ('bothify')
-                   |PARAMS_LIST_BEGIN (' ')
-                   |PARAM_BEGIN (''')
-                   |REGULAR_STRING_PART ('###')
-                   |PARAM_END (''')
-                   |} ('}')""".trimMargin()
+          |#{ ('#{')
+          |IDENTIFIER ('bothify')
+          |PARAMS_LIST_BEGIN (' ')
+          |PARAM_BEGIN (''')
+          |REGULAR_STRING_PART ('###')
+          |PARAM_END (''')
+          |} ('}')""".trimMargin()
+    )
+
+    fun testParametrizedNestedExpression() = doTest(
+        "#{json 'obj' '#{json ''foo'', ''bar''}'}",
+        """REGULAR_STRING_PART ('')
+          |#{ ('#{')
+          |IDENTIFIER ('json')
+          |PARAMS_LIST_BEGIN (' ')
+          |PARAM_BEGIN (''')
+          |REGULAR_STRING_PART ('obj')
+          |PARAM_END (''')
+          |WHITE_SPACE (' ')
+          |PARAM_BEGIN (''')
+          |#{ ('#{')
+          |IDENTIFIER ('json')
+          |PARAMS_LIST_BEGIN (' ')
+          |PARAM_DOUBLE_QUOTE_BEGIN ('''')
+          |REGULAR_STRING_PART ('foo')
+          |PARAM_DOUBLE_QUOTE_END ('''')
+          |, (',')
+          |WHITE_SPACE (' ')
+          |PARAM_DOUBLE_QUOTE_BEGIN ('''')
+          |REGULAR_STRING_PART ('bar')
+          |PARAM_DOUBLE_QUOTE_END ('''')
+          |} ('}')
+          |PARAM_END (''')
+          |} ('}')""".trimMargin()
     )
 
     // TODO

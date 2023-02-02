@@ -58,8 +58,22 @@ param ::= PARAM_BEGIN paramStatement PARAM_END {
 }
 paramStatement ::= paramExpression | paramLiteral
 paramLiteral ::= REGULAR_STRING_PART?
-paramExpression ::= EXPRESSION_LBRACE functionName EXPRESSION_RBRACE {
+paramExpression ::= EXPRESSION_LBRACE functionName paramExpressionParamsDeclaration? EXPRESSION_RBRACE {
+  pin=1
+}
+
+private paramExpressionParamsDeclaration ::= PARAMS_LIST_BEGIN nestedExpressionParamsList {
+  pin=1
+}
+
+nestedExpressionParamsList ::= nestedParamDeclaration*
+private nestedParamDeclaration ::= nestedParam (','|&'}') {
+  pin=1
+  recoverWhile=not_rbrace_or_next_nested_param_declaration
+}
+nestedParam ::= PARAM_DOUBLE_QUOTE_BEGIN REGULAR_STRING_PART? PARAM_DOUBLE_QUOTE_END {
   pin=1
 }
 
 private not_rbrace_or_next_param_declaration ::= !('}'|paramDeclaration)
+private not_rbrace_or_next_nested_param_declaration ::= !('}'|nestedParamDeclaration)

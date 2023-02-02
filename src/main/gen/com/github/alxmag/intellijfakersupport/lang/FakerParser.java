@@ -124,6 +124,98 @@ public class FakerParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // nestedParamDeclaration*
+  public static boolean nestedExpressionParamsList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nestedExpressionParamsList")) return false;
+    Marker m = enter_section_(b, l, _NONE_, NESTED_EXPRESSION_PARAMS_LIST, "<nested expression params list>");
+    while (true) {
+      int c = current_position_(b);
+      if (!nestedParamDeclaration(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "nestedExpressionParamsList", c)) break;
+    }
+    exit_section_(b, l, m, true, false, null);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // PARAM_DOUBLE_QUOTE_BEGIN REGULAR_STRING_PART? PARAM_DOUBLE_QUOTE_END
+  public static boolean nestedParam(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nestedParam")) return false;
+    if (!nextTokenIs(b, PARAM_DOUBLE_QUOTE_BEGIN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, NESTED_PARAM, null);
+    r = consumeToken(b, PARAM_DOUBLE_QUOTE_BEGIN);
+    p = r; // pin = 1
+    r = r && report_error_(b, nestedParam_1(b, l + 1));
+    r = p && consumeToken(b, PARAM_DOUBLE_QUOTE_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // REGULAR_STRING_PART?
+  private static boolean nestedParam_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nestedParam_1")) return false;
+    consumeToken(b, REGULAR_STRING_PART);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // nestedParam (','|&'}')
+  static boolean nestedParamDeclaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nestedParamDeclaration")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = nestedParam(b, l + 1);
+    p = r; // pin = 1
+    r = r && nestedParamDeclaration_1(b, l + 1);
+    exit_section_(b, l, m, r, p, FakerParser::not_rbrace_or_next_nested_param_declaration);
+    return r || p;
+  }
+
+  // ','|&'}'
+  private static boolean nestedParamDeclaration_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nestedParamDeclaration_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    if (!r) r = nestedParamDeclaration_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // &'}'
+  private static boolean nestedParamDeclaration_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "nestedParamDeclaration_1_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _AND_);
+    r = consumeToken(b, EXPRESSION_RBRACE);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // !('}'|nestedParamDeclaration)
+  static boolean not_rbrace_or_next_nested_param_declaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "not_rbrace_or_next_nested_param_declaration")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !not_rbrace_or_next_nested_param_declaration_0(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // '}'|nestedParamDeclaration
+  private static boolean not_rbrace_or_next_nested_param_declaration_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "not_rbrace_or_next_nested_param_declaration_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, EXPRESSION_RBRACE);
+    if (!r) r = nestedParamDeclaration(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // !('}'|paramDeclaration)
   static boolean not_rbrace_or_next_param_declaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "not_rbrace_or_next_param_declaration")) return false;
@@ -195,7 +287,7 @@ public class FakerParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EXPRESSION_LBRACE functionName EXPRESSION_RBRACE
+  // EXPRESSION_LBRACE functionName paramExpressionParamsDeclaration? EXPRESSION_RBRACE
   public static boolean paramExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "paramExpression")) return false;
     if (!nextTokenIs(b, EXPRESSION_LBRACE)) return false;
@@ -204,7 +296,29 @@ public class FakerParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, EXPRESSION_LBRACE);
     p = r; // pin = 1
     r = r && report_error_(b, functionName(b, l + 1));
+    r = p && report_error_(b, paramExpression_2(b, l + 1)) && r;
     r = p && consumeToken(b, EXPRESSION_RBRACE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // paramExpressionParamsDeclaration?
+  private static boolean paramExpression_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "paramExpression_2")) return false;
+    paramExpressionParamsDeclaration(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // PARAMS_LIST_BEGIN nestedExpressionParamsList
+  static boolean paramExpressionParamsDeclaration(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "paramExpressionParamsDeclaration")) return false;
+    if (!nextTokenIs(b, PARAMS_LIST_BEGIN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeToken(b, PARAMS_LIST_BEGIN);
+    p = r; // pin = 1
+    r = r && nestedExpressionParamsList(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }

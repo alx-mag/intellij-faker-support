@@ -11,6 +11,8 @@ public interface FakerTypes {
   IElementType EXPRESSION = new FakerElementType("EXPRESSION");
   IElementType EXPRESSION_PARAMS_LIST = new FakerElementType("EXPRESSION_PARAMS_LIST");
   IElementType FUNCTION_NAME = new FakerElementType("FUNCTION_NAME");
+  IElementType NESTED_EXPRESSION_PARAMS_LIST = new FakerElementType("NESTED_EXPRESSION_PARAMS_LIST");
+  IElementType NESTED_PARAM = new FakerElementType("NESTED_PARAM");
   IElementType PARAM = new FakerElementType("PARAM");
   IElementType PARAM_EXPRESSION = new FakerElementType("PARAM_EXPRESSION");
   IElementType PARAM_LITERAL = new FakerElementType("PARAM_LITERAL");
@@ -23,6 +25,8 @@ public interface FakerTypes {
   IElementType IDENTIFIER = new FakerTokenType("IDENTIFIER");
   IElementType PARAMS_LIST_BEGIN = new FakerTokenType("PARAMS_LIST_BEGIN");
   IElementType PARAM_BEGIN = new FakerTokenType("PARAM_BEGIN");
+  IElementType PARAM_DOUBLE_QUOTE_BEGIN = new FakerTokenType("PARAM_DOUBLE_QUOTE_BEGIN");
+  IElementType PARAM_DOUBLE_QUOTE_END = new FakerTokenType("PARAM_DOUBLE_QUOTE_END");
   IElementType PARAM_END = new FakerTokenType("PARAM_END");
   IElementType REGULAR_STRING_PART = new FakerTokenType("REGULAR_STRING_PART");
 
@@ -37,6 +41,12 @@ public interface FakerTypes {
       }
       else if (type == FUNCTION_NAME) {
         return new FakerFunctionNameImpl(node);
+      }
+      else if (type == NESTED_EXPRESSION_PARAMS_LIST) {
+        return new FakerNestedExpressionParamsListImpl(node);
+      }
+      else if (type == NESTED_PARAM) {
+        return new FakerNestedParamImpl(node);
       }
       else if (type == PARAM) {
         return new FakerParamImpl(node);
