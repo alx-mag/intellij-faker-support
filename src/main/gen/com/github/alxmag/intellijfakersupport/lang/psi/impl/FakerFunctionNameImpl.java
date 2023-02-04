@@ -24,10 +24,4 @@ public class FakerFunctionNameImpl extends ASTWrapperPsiElement implements Faker
     else super.accept(visitor);
   }
 
-  @Override
-  @NotNull
-  public String getFunctionName() {
-    return FakerPsiImplUtil.getFunctionName(this);
-  }
-
 }

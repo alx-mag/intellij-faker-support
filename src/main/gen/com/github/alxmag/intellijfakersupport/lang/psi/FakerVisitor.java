@@ -7,11 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class FakerVisitor extends PsiElementVisitor {
 
-  public void visitExpression(@NotNull FakerExpression o) {
-    visitPsiElement(o);
-  }
-
-  public void visitExpressionParamsList(@NotNull FakerExpressionParamsList o) {
+  public void visitContent(@NotNull FakerContent o) {
     visitPsiElement(o);
   }
 
@@ -19,27 +15,27 @@ public class FakerVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitNestedExpressionParamsList(@NotNull FakerNestedExpressionParamsList o) {
+  public void visitL1Expression(@NotNull FakerL1Expression o) {
     visitPsiElement(o);
   }
 
-  public void visitNestedParam(@NotNull FakerNestedParam o) {
+  public void visitL1Param(@NotNull FakerL1Param o) {
     visitPsiElement(o);
   }
 
-  public void visitParam(@NotNull FakerParam o) {
+  public void visitL2Expression(@NotNull FakerL2Expression o) {
     visitPsiElement(o);
   }
 
-  public void visitParamExpression(@NotNull FakerParamExpression o) {
-    visitParamStatement(o);
+  public void visitL2Param(@NotNull FakerL2Param o) {
+    visitPsiElement(o);
   }
 
-  public void visitParamLiteral(@NotNull FakerParamLiteral o) {
-    visitParamStatement(o);
+  public void visitL2ParamsList(@NotNull FakerL2ParamsList o) {
+    visitPsiElement(o);
   }
 
-  public void visitParamStatement(@NotNull FakerParamStatement o) {
+  public void visitL3Expression(@NotNull FakerL3Expression o) {
     visitPsiElement(o);
   }
 

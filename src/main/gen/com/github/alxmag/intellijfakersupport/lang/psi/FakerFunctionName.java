@@ -2,11 +2,11 @@
 package com.github.alxmag.intellijfakersupport.lang.psi;
 
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
 
 public interface FakerFunctionName extends PsiElement {
 
-  @NotNull
-  String getFunctionName();
+  //WARNING: getFunctionName(...) is skipped
+  //matching getFunctionName(FakerFunctionName, ...)
+  //methods are not found in FakerPsiImplUtil
 
 }

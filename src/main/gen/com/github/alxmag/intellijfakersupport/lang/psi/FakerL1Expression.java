@@ -2,15 +2,18 @@
 package com.github.alxmag.intellijfakersupport.lang.psi;
 
 import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface FakerParamExpression extends FakerParamStatement {
+import java.util.List;
+
+public interface FakerL1Expression extends PsiElement {
 
   @Nullable
   FakerFunctionName getFunctionName();
 
-  @Nullable
-  FakerNestedExpressionParamsList getNestedExpressionParamsList();
+  @NotNull
+  List<FakerL1Param> getL1ParamList();
 
   @Nullable
   PsiElement getParamsListBegin();

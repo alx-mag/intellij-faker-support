@@ -1,8 +1,9 @@
 // This is a generated file. Not intended for manual editing.
 package com.github.alxmag.intellijfakersupport.lang.psi.impl;
 
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerExpressionParamsList;
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerParam;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerContent;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerL1Param;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerL2Expression;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerVisitor;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
@@ -12,14 +13,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class FakerExpressionParamsListImpl extends ASTWrapperPsiElement implements FakerExpressionParamsList {
+public class FakerL1ParamImpl extends ASTWrapperPsiElement implements FakerL1Param {
 
-  public FakerExpressionParamsListImpl(@NotNull ASTNode node) {
+  public FakerL1ParamImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull FakerVisitor visitor) {
-    visitor.visitExpressionParamsList(this);
+    visitor.visitL1Param(this);
   }
 
   @Override
@@ -30,8 +31,14 @@ public class FakerExpressionParamsListImpl extends ASTWrapperPsiElement implemen
 
   @Override
   @NotNull
-  public List<FakerParam> getParamList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FakerParam.class);
+  public List<FakerContent> getContentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FakerContent.class);
+  }
+
+  @Override
+  @NotNull
+  public List<FakerL2Expression> getL2ExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FakerL2Expression.class);
   }
 
 }

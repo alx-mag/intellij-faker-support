@@ -2,9 +2,10 @@
 package com.github.alxmag.intellijfakersupport.lang.psi.impl;
 
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerFunctionName;
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerNestedExpressionParamsList;
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerParamExpression;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerL2Expression;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerL2ParamsList;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerVisitor;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
@@ -13,15 +14,14 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes.PARAMS_LIST_BEGIN;
 
-public class FakerParamExpressionImpl extends FakerParamStatementImpl implements FakerParamExpression {
+public class FakerL2ExpressionImpl extends ASTWrapperPsiElement implements FakerL2Expression {
 
-  public FakerParamExpressionImpl(@NotNull ASTNode node) {
+  public FakerL2ExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull FakerVisitor visitor) {
-    visitor.visitParamExpression(this);
+    visitor.visitL2Expression(this);
   }
 
   @Override
@@ -38,8 +38,8 @@ public class FakerParamExpressionImpl extends FakerParamStatementImpl implements
 
   @Override
   @Nullable
-  public FakerNestedExpressionParamsList getNestedExpressionParamsList() {
-    return findChildByClass(FakerNestedExpressionParamsList.class);
+  public FakerL2ParamsList getL2ParamsList() {
+    return findChildByClass(FakerL2ParamsList.class);
   }
 
   @Override

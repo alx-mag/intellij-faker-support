@@ -4,15 +4,9 @@ package com.github.alxmag.intellijfakersupport.lang.psi;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nullable;
 
-public interface FakerExpression extends PsiElement {
-
-  @Nullable
-  FakerExpressionParamsList getExpressionParamsList();
+public interface FakerL3Expression extends PsiElement {
 
   @Nullable
   FakerFunctionName getFunctionName();
-
-  @Nullable
-  PsiElement getParamsListBegin();
 
 }

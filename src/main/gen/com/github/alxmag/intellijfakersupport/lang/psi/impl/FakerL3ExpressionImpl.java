@@ -1,25 +1,23 @@
 // This is a generated file. Not intended for manual editing.
 package com.github.alxmag.intellijfakersupport.lang.psi.impl;
 
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerParamLiteral;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerFunctionName;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerL3Expression;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerVisitor;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes.REGULAR_STRING_PART;
+public class FakerL3ExpressionImpl extends ASTWrapperPsiElement implements FakerL3Expression {
 
-public class FakerParamLiteralImpl extends FakerParamStatementImpl implements FakerParamLiteral {
-
-  public FakerParamLiteralImpl(@NotNull ASTNode node) {
+  public FakerL3ExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
-  @Override
   public void accept(@NotNull FakerVisitor visitor) {
-    visitor.visitParamLiteral(this);
+    visitor.visitL3Expression(this);
   }
 
   @Override
@@ -30,8 +28,8 @@ public class FakerParamLiteralImpl extends FakerParamStatementImpl implements Fa
 
   @Override
   @Nullable
-  public PsiElement getRegularStringPart() {
-    return findChildByType(REGULAR_STRING_PART);
+  public FakerFunctionName getFunctionName() {
+    return findChildByClass(FakerFunctionName.class);
   }
 
 }

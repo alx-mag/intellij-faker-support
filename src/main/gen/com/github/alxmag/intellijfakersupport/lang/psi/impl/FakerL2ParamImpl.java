@@ -1,8 +1,9 @@
 // This is a generated file. Not intended for manual editing.
 package com.github.alxmag.intellijfakersupport.lang.psi.impl;
 
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerNestedExpressionParamsList;
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerNestedParam;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerContent;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerL2Param;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerL3Expression;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerVisitor;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
@@ -12,14 +13,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class FakerNestedExpressionParamsListImpl extends ASTWrapperPsiElement implements FakerNestedExpressionParamsList {
+public class FakerL2ParamImpl extends ASTWrapperPsiElement implements FakerL2Param {
 
-  public FakerNestedExpressionParamsListImpl(@NotNull ASTNode node) {
+  public FakerL2ParamImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull FakerVisitor visitor) {
-    visitor.visitNestedExpressionParamsList(this);
+    visitor.visitL2Param(this);
   }
 
   @Override
@@ -30,8 +31,14 @@ public class FakerNestedExpressionParamsListImpl extends ASTWrapperPsiElement im
 
   @Override
   @NotNull
-  public List<FakerNestedParam> getNestedParamList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FakerNestedParam.class);
+  public List<FakerContent> getContentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FakerContent.class);
+  }
+
+  @Override
+  @NotNull
+  public List<FakerL3Expression> getL3ExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FakerL3Expression.class);
   }
 
 }

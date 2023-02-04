@@ -6,9 +6,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public interface FakerNestedExpressionParamsList extends PsiElement {
+public interface FakerL2Param extends PsiElement {
 
   @NotNull
-  List<FakerNestedParam> getNestedParamList();
+  List<FakerContent> getContentList();
+
+  @NotNull
+  List<FakerL3Expression> getL3ExpressionList();
 
 }

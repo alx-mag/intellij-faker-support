@@ -4,9 +4,15 @@ package com.github.alxmag.intellijfakersupport.lang.psi;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nullable;
 
-public interface FakerNestedParam extends PsiElement {
+public interface FakerL2Expression extends PsiElement {
 
   @Nullable
-  PsiElement getRegularStringPart();
+  FakerFunctionName getFunctionName();
+
+  @Nullable
+  FakerL2ParamsList getL2ParamsList();
+
+  @Nullable
+  PsiElement getParamsListBegin();
 
 }
