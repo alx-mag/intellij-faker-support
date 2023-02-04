@@ -19,6 +19,8 @@
                                        implementationClass="com.github.alxmag.intellijfakersupport.lang.FakerSyntaxHighlighterFactory"/>
         <lang.parserDefinition language="Faker"
                                implementationClass="com.github.alxmag.intellijfakersupport.lang.FakerParserDefinition"/>
+        <lang.braceMatcher language="Faker"
+                           implementationClass="com.github.alxmag.intellijfakersupport.lang.FakerBraceMatcher"/>
 
         <typedHandler implementation="com.github.alxmag.intellijfakersupport.lang.editor.FakerTypedHandler"/>
         <quoteHandler className="com.github.alxmag.intellijfakersupport.lang.editor.FakerQuoteHandler"
