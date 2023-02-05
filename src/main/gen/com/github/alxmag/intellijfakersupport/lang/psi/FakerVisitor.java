@@ -7,10 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class FakerVisitor extends PsiElementVisitor {
 
-  public void visitContent(@NotNull FakerContent o) {
-    visitPsiElement(o);
-  }
-
   public void visitFunctionName(@NotNull FakerFunctionName o) {
     visitPsiElement(o);
   }

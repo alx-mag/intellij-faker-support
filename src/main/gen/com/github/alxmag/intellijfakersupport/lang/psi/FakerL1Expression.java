@@ -16,6 +16,6 @@ public interface FakerL1Expression extends PsiElement {
   List<FakerL1Param> getL1ParamList();
 
   @Nullable
-  PsiElement getParamsListBegin();
+  PsiElement getParamsListSeparator();
 
 }

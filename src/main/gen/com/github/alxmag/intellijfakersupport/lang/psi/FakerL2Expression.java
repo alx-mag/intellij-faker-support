@@ -13,6 +13,6 @@ public interface FakerL2Expression extends PsiElement {
   FakerL2ParamsList getL2ParamsList();
 
   @Nullable
-  PsiElement getParamsListBegin();
+  PsiElement getParamsListSeparator();
 
 }

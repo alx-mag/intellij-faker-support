@@ -689,7 +689,7 @@ class FakerLexer implements FlexLexer {
           case 27: break;
           case 8: 
             { yypushState(IN_FUNCTION_ARGS);
-                      return FakerTypes.PARAMS_LIST_BEGIN;
+                      return FakerTypes.PARAMS_LIST_SEPARATOR;
             } 
             // fall through
           case 28: break;
@@ -711,7 +711,7 @@ class FakerLexer implements FlexLexer {
           case 31: break;
           case 12: 
             { yypushState(IN_NESTED_EXPRESSION_ARGS);
-                      return FakerTypes.PARAMS_LIST_BEGIN;
+                      return FakerTypes.PARAMS_LIST_SEPARATOR;
             } 
             // fall through
           case 32: break;

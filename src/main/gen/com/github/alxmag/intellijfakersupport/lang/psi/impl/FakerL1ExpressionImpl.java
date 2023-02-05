@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes.PARAMS_LIST_BEGIN;
+import static com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes.PARAMS_LIST_SEPARATOR;
 
 public class FakerL1ExpressionImpl extends ASTWrapperPsiElement implements FakerL1Expression {
 
@@ -47,8 +47,8 @@ public class FakerL1ExpressionImpl extends ASTWrapperPsiElement implements Faker
 
   @Override
   @Nullable
-  public PsiElement getParamsListBegin() {
-    return findChildByType(PARAMS_LIST_BEGIN);
+  public PsiElement getParamsListSeparator() {
+    return findChildByType(PARAMS_LIST_SEPARATOR);
   }
 
 }

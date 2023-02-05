@@ -8,7 +8,6 @@ import com.intellij.psi.tree.IElementType;
 
 public interface FakerTypes {
 
-  IElementType CONTENT = new FakerElementType("CONTENT");
   IElementType FUNCTION_NAME = new FakerElementType("FUNCTION_NAME");
   IElementType L_1_EXPRESSION = new FakerElementType("L_1_EXPRESSION");
   IElementType L_1_PARAM = new FakerElementType("L_1_PARAM");
@@ -22,7 +21,7 @@ public interface FakerTypes {
   IElementType EXPRESSION_LBRACE = new FakerTokenType("#{");
   IElementType EXPRESSION_RBRACE = new FakerTokenType("}");
   IElementType IDENTIFIER = new FakerTokenType("IDENTIFIER");
-  IElementType PARAMS_LIST_BEGIN = new FakerTokenType("PARAMS_LIST_BEGIN");
+  IElementType PARAMS_LIST_SEPARATOR = new FakerTokenType("PARAMS_LIST_SEPARATOR");
   IElementType PARAM_BEGIN = new FakerTokenType("PARAM_BEGIN");
   IElementType PARAM_DOUBLE_QUOTE_BEGIN = new FakerTokenType("PARAM_DOUBLE_QUOTE_BEGIN");
   IElementType PARAM_DOUBLE_QUOTE_END = new FakerTokenType("PARAM_DOUBLE_QUOTE_END");
@@ -32,10 +31,7 @@ public interface FakerTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-      if (type == CONTENT) {
-        return new FakerContentImpl(node);
-      }
-      else if (type == FUNCTION_NAME) {
+      if (type == FUNCTION_NAME) {
         return new FakerFunctionNameImpl(node);
       }
       else if (type == L_1_EXPRESSION) {

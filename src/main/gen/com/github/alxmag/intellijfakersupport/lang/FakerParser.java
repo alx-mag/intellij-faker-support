@@ -37,14 +37,8 @@ public class FakerParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // REGULAR_STRING_PART
-  public static boolean content(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "content")) return false;
-    if (!nextTokenIs(b, REGULAR_STRING_PART)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, REGULAR_STRING_PART);
-    exit_section_(b, m, CONTENT, r);
-    return r;
+  static boolean content(PsiBuilder b, int l) {
+    return consumeToken(b, REGULAR_STRING_PART);
   }
 
   /* ********************************************************** */
@@ -172,13 +166,13 @@ public class FakerParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PARAMS_LIST_BEGIN l1ExpressionParamsList
+  // PARAMS_LIST_SEPARATOR l1ExpressionParamsList
   static boolean l1ParamsListDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "l1ParamsListDeclaration")) return false;
-    if (!nextTokenIs(b, PARAMS_LIST_BEGIN)) return false;
+    if (!nextTokenIs(b, PARAMS_LIST_SEPARATOR)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = consumeToken(b, PARAMS_LIST_BEGIN);
+    r = consumeToken(b, PARAMS_LIST_SEPARATOR);
     p = r; // pin = 1
     r = r && l1ExpressionParamsList(b, l + 1);
     exit_section_(b, l, m, r, p, null);
@@ -230,13 +224,13 @@ public class FakerParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PARAMS_LIST_BEGIN l2ParamsList
+  // PARAMS_LIST_SEPARATOR l2ParamsList
   static boolean l2ExpressionParamsList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "l2ExpressionParamsList")) return false;
-    if (!nextTokenIs(b, PARAMS_LIST_BEGIN)) return false;
+    if (!nextTokenIs(b, PARAMS_LIST_SEPARATOR)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = consumeToken(b, PARAMS_LIST_BEGIN);
+    r = consumeToken(b, PARAMS_LIST_SEPARATOR);
     p = r; // pin = 1
     r = r && l2ParamsList(b, l + 1);
     exit_section_(b, l, m, r, p, null);

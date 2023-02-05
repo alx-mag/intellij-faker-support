@@ -26,7 +26,7 @@
     DOT='.'
     COMMA=','
 
-    PARAMS_LIST_BEGIN="regexp:(\s)+"
+    PARAMS_LIST_SEPARATOR="regexp:(\s)+"
 
     IDENTIFIER="regexp:[a-zA-Z]+[a-zA-Z0-9]+"
   ]
@@ -47,7 +47,7 @@ l1Expression ::= EXPRESSION_LBRACE functionName l1ParamsListDeclaration? EXPRESS
 functionName ::= IDENTIFIER (DOT IDENTIFIER)* {
   methods=[getFunctionName]
 }
-private l1ParamsListDeclaration ::= PARAMS_LIST_BEGIN l1ExpressionParamsList {
+private l1ParamsListDeclaration ::= PARAMS_LIST_SEPARATOR l1ExpressionParamsList {
   pin=1
 }
 private l1ExpressionParamsList ::= l1ParamDeclaration*
@@ -66,7 +66,7 @@ l2Expression ::= EXPRESSION_LBRACE functionName l2ExpressionParamsList? EXPRESSI
   pin=1
   name="Nested expression"
 }
-private l2ExpressionParamsList ::= PARAMS_LIST_BEGIN l2ParamsList {
+private l2ExpressionParamsList ::= PARAMS_LIST_SEPARATOR l2ParamsList {
   pin=1
 }
 l2ParamsList ::= l2ParamDeclaration*
@@ -89,7 +89,7 @@ l3Expression ::= EXPRESSION_LBRACE functionName EXPRESSION_RBRACE {
 }
 
 ///// Common /////
-content ::= REGULAR_STRING_PART
+private content ::= REGULAR_STRING_PART
 
 private not_rbrace_or_next_l1ParamDeclaration ::= !('}'|l1ParamDeclaration)
 private not_rbrace_or_next_l2ParamDeclaration ::= !('}'|l2ParamDeclaration)

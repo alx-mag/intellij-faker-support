@@ -66,7 +66,7 @@ IDENTIFIER=[:jletter:] [:jletterdigit:]*
                     }
     {WHITE_SPACE}+  {
                       yypushState(IN_FUNCTION_ARGS);
-                      return FakerTypes.PARAMS_LIST_BEGIN;
+                      return FakerTypes.PARAMS_LIST_SEPARATOR;
                     }
 }
 
@@ -106,7 +106,7 @@ IDENTIFIER=[:jletter:] [:jletterdigit:]*
     \.              { return FakerTypes.DOT; }
     {WHITE_SPACE}+  {
                       yypushState(IN_NESTED_EXPRESSION_ARGS);
-                      return FakerTypes.PARAMS_LIST_BEGIN;
+                      return FakerTypes.PARAMS_LIST_SEPARATOR;
                     }
 }
 

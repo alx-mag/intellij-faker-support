@@ -9,9 +9,6 @@ import java.util.List;
 public interface FakerL2Param extends PsiElement {
 
   @NotNull
-  List<FakerContent> getContentList();
-
-  @NotNull
   List<FakerL3Expression> getL3ExpressionList();
 
 }
