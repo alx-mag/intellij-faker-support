@@ -11,10 +11,12 @@ public interface FakerTypes {
   IElementType FUNCTION_NAME = new FakerElementType("FUNCTION_NAME");
   IElementType L_1_EXPRESSION = new FakerElementType("L_1_EXPRESSION");
   IElementType L_1_PARAM = new FakerElementType("L_1_PARAM");
+  IElementType L_1_TEMPLATE = new FakerElementType("L_1_TEMPLATE");
   IElementType L_2_EXPRESSION = new FakerElementType("L_2_EXPRESSION");
   IElementType L_2_PARAM = new FakerElementType("L_2_PARAM");
-  IElementType L_2_PARAMS_LIST = new FakerElementType("L_2_PARAMS_LIST");
+  IElementType L_2_TEMPLATE = new FakerElementType("L_2_TEMPLATE");
   IElementType L_3_EXPRESSION = new FakerElementType("L_3_EXPRESSION");
+  IElementType L_3_TEMPLATE = new FakerElementType("L_3_TEMPLATE");
 
   IElementType COMMA = new FakerTokenType(",");
   IElementType DOT = new FakerTokenType(".");
@@ -40,17 +42,23 @@ public interface FakerTypes {
       else if (type == L_1_PARAM) {
         return new FakerL1ParamImpl(node);
       }
+      else if (type == L_1_TEMPLATE) {
+        return new FakerL1TemplateImpl(node);
+      }
       else if (type == L_2_EXPRESSION) {
         return new FakerL2ExpressionImpl(node);
       }
       else if (type == L_2_PARAM) {
         return new FakerL2ParamImpl(node);
       }
-      else if (type == L_2_PARAMS_LIST) {
-        return new FakerL2ParamsListImpl(node);
+      else if (type == L_2_TEMPLATE) {
+        return new FakerL2TemplateImpl(node);
       }
       else if (type == L_3_EXPRESSION) {
         return new FakerL3ExpressionImpl(node);
+      }
+      else if (type == L_3_TEMPLATE) {
+        return new FakerL3TemplateImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

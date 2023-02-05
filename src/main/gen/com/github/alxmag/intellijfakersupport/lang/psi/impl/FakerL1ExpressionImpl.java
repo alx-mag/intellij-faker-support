@@ -5,7 +5,6 @@ import com.github.alxmag.intellijfakersupport.lang.psi.FakerFunctionName;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerL1Expression;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerL1Param;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerVisitor;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
@@ -17,12 +16,13 @@ import java.util.List;
 
 import static com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes.PARAMS_LIST_SEPARATOR;
 
-public class FakerL1ExpressionImpl extends ASTWrapperPsiElement implements FakerL1Expression {
+public class FakerL1ExpressionImpl extends FakerExpressionImpl implements FakerL1Expression {
 
   public FakerL1ExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull FakerVisitor visitor) {
     visitor.visitL1Expression(this);
   }
@@ -40,15 +40,15 @@ public class FakerL1ExpressionImpl extends ASTWrapperPsiElement implements Faker
   }
 
   @Override
-  @NotNull
-  public List<FakerL1Param> getL1ParamList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FakerL1Param.class);
-  }
-
-  @Override
   @Nullable
   public PsiElement getParamsListSeparator() {
     return findChildByType(PARAMS_LIST_SEPARATOR);
+  }
+
+  @Override
+  @NotNull
+  public List<FakerL1Param> getParams() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FakerL1Param.class);
   }
 
 }

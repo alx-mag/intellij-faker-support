@@ -2,13 +2,11 @@
 package com.github.alxmag.intellijfakersupport.lang.psi;
 
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
+import org.jetbrains.annotations.Nullable;
 
 public interface FakerL2Param extends PsiElement {
 
-  @NotNull
-  List<FakerL3Expression> getL3ExpressionList();
+  @Nullable
+  FakerL3Template getValue();
 
 }

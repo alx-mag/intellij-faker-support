@@ -7,6 +7,7 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.lang.PsiParser;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.tree.TokenSet;
 
 import static com.github.alxmag.intellijfakersupport.lang.FakerParserUtil.*;
 import static com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes.*;
@@ -21,7 +22,7 @@ public class FakerParser implements PsiParser, LightPsiParser {
 
   public void parseLight(IElementType t, PsiBuilder b) {
     boolean r;
-    b = adapt_builder_(t, b, this, null);
+    b = adapt_builder_(t, b, this, EXTENDS_SETS_);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
     r = parse_root_(t, b);
     exit_section_(b, 0, m, t, r, true, TRUE_CONDITION);
@@ -34,6 +35,11 @@ public class FakerParser implements PsiParser, LightPsiParser {
   static boolean parse_root_(IElementType t, PsiBuilder b, int l) {
     return fakerFile(b, l + 1);
   }
+
+  public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
+    create_token_set_(L_1_TEMPLATE, L_2_TEMPLATE, L_3_TEMPLATE),
+    create_token_set_(L_1_EXPRESSION, L_2_EXPRESSION, L_3_EXPRESSION),
+  };
 
   /* ********************************************************** */
   // REGULAR_STRING_PART
@@ -181,13 +187,15 @@ public class FakerParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // (l1Expression | content)*
-  static boolean l1Template(PsiBuilder b, int l) {
+  public static boolean l1Template(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "l1Template")) return false;
+    Marker m = enter_section_(b, l, _NONE_, L_1_TEMPLATE, "<l 1 template>");
     while (true) {
       int c = current_position_(b);
       if (!l1Template_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "l1Template", c)) break;
     }
+    exit_section_(b, l, m, true, false, null);
     return true;
   }
 
@@ -288,27 +296,27 @@ public class FakerParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // l2ParamDeclaration*
-  public static boolean l2ParamsList(PsiBuilder b, int l) {
+  static boolean l2ParamsList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "l2ParamsList")) return false;
-    Marker m = enter_section_(b, l, _NONE_, L_2_PARAMS_LIST, "<l 2 params list>");
     while (true) {
       int c = current_position_(b);
       if (!l2ParamDeclaration(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "l2ParamsList", c)) break;
     }
-    exit_section_(b, l, m, true, false, null);
     return true;
   }
 
   /* ********************************************************** */
   // (l2Expression | content)*
-  static boolean l2Template(PsiBuilder b, int l) {
+  public static boolean l2Template(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "l2Template")) return false;
+    Marker m = enter_section_(b, l, _NONE_, L_2_TEMPLATE, "<l 2 template>");
     while (true) {
       int c = current_position_(b);
       if (!l2Template_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "l2Template", c)) break;
     }
+    exit_section_(b, l, m, true, false, null);
     return true;
   }
 
@@ -338,13 +346,15 @@ public class FakerParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // (l3Expression | content)*
-  static boolean l3Template(PsiBuilder b, int l) {
+  public static boolean l3Template(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "l3Template")) return false;
+    Marker m = enter_section_(b, l, _NONE_, L_3_TEMPLATE, "<l 3 template>");
     while (true) {
       int c = current_position_(b);
       if (!l3Template_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "l3Template", c)) break;
     }
+    exit_section_(b, l, m, true, false, null);
     return true;
   }
 

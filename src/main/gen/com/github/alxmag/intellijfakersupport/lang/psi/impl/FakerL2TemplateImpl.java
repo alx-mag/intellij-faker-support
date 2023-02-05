@@ -1,23 +1,25 @@
 // This is a generated file. Not intended for manual editing.
 package com.github.alxmag.intellijfakersupport.lang.psi.impl;
 
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerFunctionName;
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerL3Expression;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerL2Expression;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerL2Template;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerVisitor;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class FakerL3ExpressionImpl extends FakerExpressionImpl implements FakerL3Expression {
+import java.util.List;
 
-  public FakerL3ExpressionImpl(@NotNull ASTNode node) {
+public class FakerL2TemplateImpl extends FakerTemplateImpl implements FakerL2Template {
+
+  public FakerL2TemplateImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
   public void accept(@NotNull FakerVisitor visitor) {
-    visitor.visitL3Expression(this);
+    visitor.visitL2Template(this);
   }
 
   @Override
@@ -27,9 +29,9 @@ public class FakerL3ExpressionImpl extends FakerExpressionImpl implements FakerL
   }
 
   @Override
-  @Nullable
-  public FakerFunctionName getFunctionName() {
-    return findChildByClass(FakerFunctionName.class);
+  @NotNull
+  public List<FakerL2Expression> getExpressions() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FakerL2Expression.class);
   }
 
 }

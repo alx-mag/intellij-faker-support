@@ -7,15 +7,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface FakerL1Expression extends PsiElement {
+public interface FakerL1Expression extends FakerExpression {
 
   @Nullable
   FakerFunctionName getFunctionName();
 
-  @NotNull
-  List<FakerL1Param> getL1ParamList();
-
   @Nullable
   PsiElement getParamsListSeparator();
+
+  @NotNull
+  List<FakerL1Param> getParams();
 
 }

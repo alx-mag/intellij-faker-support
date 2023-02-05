@@ -2,15 +2,13 @@
 package com.github.alxmag.intellijfakersupport.lang.psi.impl;
 
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerL1Param;
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerL2Expression;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerL2Template;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerVisitor;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
+import org.jetbrains.annotations.Nullable;
 
 public class FakerL1ParamImpl extends ASTWrapperPsiElement implements FakerL1Param {
 
@@ -29,9 +27,9 @@ public class FakerL1ParamImpl extends ASTWrapperPsiElement implements FakerL1Par
   }
 
   @Override
-  @NotNull
-  public List<FakerL2Expression> getL2ExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FakerL2Expression.class);
+  @Nullable
+  public FakerL2Template getValue() {
+    return findChildByClass(FakerL2Template.class);
   }
 
 }

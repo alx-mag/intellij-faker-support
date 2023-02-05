@@ -3,23 +3,26 @@ package com.github.alxmag.intellijfakersupport.lang.psi.impl;
 
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerFunctionName;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerL2Expression;
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerL2ParamsList;
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerL2Param;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerVisitor;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 import static com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes.PARAMS_LIST_SEPARATOR;
 
-public class FakerL2ExpressionImpl extends ASTWrapperPsiElement implements FakerL2Expression {
+public class FakerL2ExpressionImpl extends FakerExpressionImpl implements FakerL2Expression {
 
   public FakerL2ExpressionImpl(@NotNull ASTNode node) {
     super(node);
   }
 
+  @Override
   public void accept(@NotNull FakerVisitor visitor) {
     visitor.visitL2Expression(this);
   }
@@ -38,14 +41,14 @@ public class FakerL2ExpressionImpl extends ASTWrapperPsiElement implements Faker
 
   @Override
   @Nullable
-  public FakerL2ParamsList getL2ParamsList() {
-    return findChildByClass(FakerL2ParamsList.class);
+  public PsiElement getParamsListSeparator() {
+    return findChildByType(PARAMS_LIST_SEPARATOR);
   }
 
   @Override
-  @Nullable
-  public PsiElement getParamsListSeparator() {
-    return findChildByType(PARAMS_LIST_SEPARATOR);
+  @NotNull
+  public List<FakerL2Param> getParams() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, FakerL2Param.class);
   }
 
 }

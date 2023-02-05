@@ -31,21 +31,23 @@
     IDENTIFIER="regexp:[a-zA-Z]+[a-zA-Z0-9]+"
   ]
 
-//  extends("l2Expression|literal")=l1ParamValue
-//  extends("l3Expression|literal")=l2ParamValue
-//  extends("|")
+  extends("l1Template|l2Template|l3Template")=template
+  extends("l1Expression|l2Expression|l3Expression")=expression
 }
 
 fakerFile ::= l1Template
 
 ///// L1 /////
-private l1Template ::= (l1Expression | content)*
+l1Template ::= (l1Expression | content)* {
+  methods=[ expressions="l1Expression" ]
+}
 l1Expression ::= EXPRESSION_LBRACE functionName l1ParamsListDeclaration? EXPRESSION_RBRACE {
   pin=1
   name="Expression"
+  methods=[ params="l1Param" ]
 }
 functionName ::= IDENTIFIER (DOT IDENTIFIER)* {
-  methods=[getFunctionName]
+  methods = [getFunctionName]
 }
 private l1ParamsListDeclaration ::= PARAMS_LIST_SEPARATOR l1ExpressionParamsList {
   pin=1
@@ -58,18 +60,22 @@ private l1ParamDeclaration ::= l1Param (','|&'}') {
 l1Param ::= PARAM_BEGIN l2Template PARAM_END {
   pin=1
   name="Single-quoted parameter"
+  methods=[ value="l2Template" ]
 }
 
 ///// L2 /////
-private l2Template ::= (l2Expression | content)*
+l2Template ::= (l2Expression | content)* {
+  methods=[ expressions="l2Expression" ]
+}
 l2Expression ::= EXPRESSION_LBRACE functionName l2ExpressionParamsList? EXPRESSION_RBRACE {
   pin=1
   name="Nested expression"
+  methods=[ params="l2Param" ]
 }
 private l2ExpressionParamsList ::= PARAMS_LIST_SEPARATOR l2ParamsList {
   pin=1
 }
-l2ParamsList ::= l2ParamDeclaration*
+private l2ParamsList ::= l2ParamDeclaration*
 private l2ParamDeclaration ::= l2Param (','|&'}') {
   pin=1
   recoverWhile=not_rbrace_or_next_l2ParamDeclaration
@@ -78,10 +84,13 @@ private l2ParamDeclaration ::= l2Param (','|&'}') {
 l2Param ::= PARAM_DOUBLE_QUOTE_BEGIN l3Template PARAM_DOUBLE_QUOTE_END {
   pin=1
   name="Double apostrophe parameter"
+  methods=[ value="l3Template" ]
 }
 
 ///// L3 /////
-private l3Template ::= (l3Expression | content)*
+l3Template ::= (l3Expression | content)* {
+  methods=[ expressions="l3Expression" ]
+}
 // L3 Expression has no params
 l3Expression ::= EXPRESSION_LBRACE functionName EXPRESSION_RBRACE {
   pin=1
@@ -90,6 +99,9 @@ l3Expression ::= EXPRESSION_LBRACE functionName EXPRESSION_RBRACE {
 
 ///// Common /////
 private content ::= REGULAR_STRING_PART
+fake template ::=
+fake expression ::=
 
+///// Recover rules /////
 private not_rbrace_or_next_l1ParamDeclaration ::= !('}'|l1ParamDeclaration)
 private not_rbrace_or_next_l2ParamDeclaration ::= !('}'|l2ParamDeclaration)
