@@ -88,7 +88,7 @@ public class FakerParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EXPRESSION_LBRACE functionName l1ParamsListDeclaration? EXPRESSION_RBRACE
+  // EXPRESSION_LBRACE (functionName l1ParamsListDeclaration?)? EXPRESSION_RBRACE
   public static boolean l1Expression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "l1Expression")) return false;
     if (!nextTokenIs(b, "<Expression>", EXPRESSION_LBRACE)) return false;
@@ -96,16 +96,33 @@ public class FakerParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, L_1_EXPRESSION, "<Expression>");
     r = consumeToken(b, EXPRESSION_LBRACE);
     p = r; // pin = 1
-    r = r && report_error_(b, functionName(b, l + 1));
-    r = p && report_error_(b, l1Expression_2(b, l + 1)) && r;
+    r = r && report_error_(b, l1Expression_1(b, l + 1));
     r = p && consumeToken(b, EXPRESSION_RBRACE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
+  // (functionName l1ParamsListDeclaration?)?
+  private static boolean l1Expression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "l1Expression_1")) return false;
+    l1Expression_1_0(b, l + 1);
+    return true;
+  }
+
+  // functionName l1ParamsListDeclaration?
+  private static boolean l1Expression_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "l1Expression_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = functionName(b, l + 1);
+    r = r && l1Expression_1_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
   // l1ParamsListDeclaration?
-  private static boolean l1Expression_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "l1Expression_2")) return false;
+  private static boolean l1Expression_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "l1Expression_1_0_1")) return false;
     l1ParamsListDeclaration(b, l + 1);
     return true;
   }
@@ -209,7 +226,7 @@ public class FakerParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EXPRESSION_LBRACE functionName l2ExpressionParamsList? EXPRESSION_RBRACE
+  // EXPRESSION_LBRACE (functionName l2ExpressionParamsList?)? EXPRESSION_RBRACE
   public static boolean l2Expression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "l2Expression")) return false;
     if (!nextTokenIs(b, "<Nested expression>", EXPRESSION_LBRACE)) return false;
@@ -217,16 +234,33 @@ public class FakerParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, L_2_EXPRESSION, "<Nested expression>");
     r = consumeToken(b, EXPRESSION_LBRACE);
     p = r; // pin = 1
-    r = r && report_error_(b, functionName(b, l + 1));
-    r = p && report_error_(b, l2Expression_2(b, l + 1)) && r;
+    r = r && report_error_(b, l2Expression_1(b, l + 1));
     r = p && consumeToken(b, EXPRESSION_RBRACE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
+  // (functionName l2ExpressionParamsList?)?
+  private static boolean l2Expression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "l2Expression_1")) return false;
+    l2Expression_1_0(b, l + 1);
+    return true;
+  }
+
+  // functionName l2ExpressionParamsList?
+  private static boolean l2Expression_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "l2Expression_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = functionName(b, l + 1);
+    r = r && l2Expression_1_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
   // l2ExpressionParamsList?
-  private static boolean l2Expression_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "l2Expression_2")) return false;
+  private static boolean l2Expression_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "l2Expression_1_0_1")) return false;
     l2ExpressionParamsList(b, l + 1);
     return true;
   }
@@ -330,7 +364,7 @@ public class FakerParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EXPRESSION_LBRACE functionName EXPRESSION_RBRACE
+  // EXPRESSION_LBRACE functionName? EXPRESSION_RBRACE
   public static boolean l3Expression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "l3Expression")) return false;
     if (!nextTokenIs(b, "<Nested expression>", EXPRESSION_LBRACE)) return false;
@@ -338,10 +372,17 @@ public class FakerParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, L_3_EXPRESSION, "<Nested expression>");
     r = consumeToken(b, EXPRESSION_LBRACE);
     p = r; // pin = 1
-    r = r && report_error_(b, functionName(b, l + 1));
+    r = r && report_error_(b, l3Expression_1(b, l + 1));
     r = p && consumeToken(b, EXPRESSION_RBRACE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // functionName?
+  private static boolean l3Expression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "l3Expression_1")) return false;
+    functionName(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */

@@ -22,7 +22,8 @@
         <lang.braceMatcher language="Faker"
                            implementationClass="com.github.alxmag.intellijfakersupport.lang.FakerBraceMatcher"/>
 
-        <typedHandler implementation="com.github.alxmag.intellijfakersupport.lang.editor.FakerTypedHandler"/>
+        <!--TODO can be removed-->
+<!--        <typedHandler implementation="com.github.alxmag.intellijfakersupport.lang.editor.FakerTypedHandler"/>-->
         <quoteHandler className="com.github.alxmag.intellijfakersupport.lang.editor.FakerQuoteHandler"
                       fileType="Faker"/>
 

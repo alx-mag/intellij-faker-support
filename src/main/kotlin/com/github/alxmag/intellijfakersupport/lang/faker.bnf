@@ -41,7 +41,7 @@ fakerFile ::= l1Template
 l1Template ::= (l1Expression | content)* {
   methods=[ expressions="l1Expression" ]
 }
-l1Expression ::= EXPRESSION_LBRACE functionName l1ParamsListDeclaration? EXPRESSION_RBRACE {
+l1Expression ::= EXPRESSION_LBRACE (functionName l1ParamsListDeclaration?)? EXPRESSION_RBRACE {
   pin=1
   name="Expression"
   methods=[ params="l1Param" ]
@@ -67,7 +67,7 @@ l1Param ::= PARAM_BEGIN l2Template PARAM_END {
 l2Template ::= (l2Expression | content)* {
   methods=[ expressions="l2Expression" ]
 }
-l2Expression ::= EXPRESSION_LBRACE functionName l2ExpressionParamsList? EXPRESSION_RBRACE {
+l2Expression ::= EXPRESSION_LBRACE (functionName l2ExpressionParamsList?)? EXPRESSION_RBRACE {
   pin=1
   name="Nested expression"
   methods=[ params="l2Param" ]
@@ -92,7 +92,7 @@ l3Template ::= (l3Expression | content)* {
   methods=[ expressions="l3Expression" ]
 }
 // L3 Expression has no params
-l3Expression ::= EXPRESSION_LBRACE functionName EXPRESSION_RBRACE {
+l3Expression ::= EXPRESSION_LBRACE functionName? EXPRESSION_RBRACE {
   pin=1
   name="Nested expression"
 }
