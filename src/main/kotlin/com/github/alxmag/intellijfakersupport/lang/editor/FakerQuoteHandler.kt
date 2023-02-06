@@ -4,7 +4,9 @@ import com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes
 import com.intellij.codeInsight.editorActions.MultiCharQuoteHandler
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.highlighter.HighlighterIterator
+import com.intellij.openapi.util.TextRange
 
+// TODO
 class FakerQuoteHandler : MultiCharQuoteHandler {
 
     override fun isOpeningQuote(iterator: HighlighterIterator, offset: Int): Boolean {
@@ -17,11 +19,16 @@ class FakerQuoteHandler : MultiCharQuoteHandler {
         return CLOSING_QUOTES.any { it == tokenType }
     }
 
-    override fun hasNonClosedLiteral(editor: Editor?, iterator: HighlighterIterator?, offset: Int): Boolean = true
+    override fun hasNonClosedLiteral(editor: Editor, iterator: HighlighterIterator, offset: Int): Boolean = true
 
-    override fun isInsideLiteral(iterator: HighlighterIterator?): Boolean = false
+    override fun isInsideLiteral(iterator: HighlighterIterator): Boolean = false
+
     override fun getClosingQuote(iterator: HighlighterIterator, offset: Int): CharSequence? {
-        TODO("Not yet implemented")
+        if (offset >= 2) {
+            val quote = iterator.document.getText(TextRange(offset - 2, offset))
+            if (quote == "''") return quote
+        }
+        return null
     }
 
     companion object {
