@@ -54,19 +54,19 @@ public class FakerParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // IDENTIFIER (DOT IDENTIFIER)*
+  // functionNameSegment (DOT functionNameSegment)*
   public static boolean functionName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "functionName")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
+    r = functionNameSegment(b, l + 1);
     r = r && functionName_1(b, l + 1);
     exit_section_(b, m, FUNCTION_NAME, r);
     return r;
   }
 
-  // (DOT IDENTIFIER)*
+  // (DOT functionNameSegment)*
   private static boolean functionName_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "functionName_1")) return false;
     while (true) {
@@ -77,13 +77,26 @@ public class FakerParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // DOT IDENTIFIER
+  // DOT functionNameSegment
   private static boolean functionName_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "functionName_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, DOT, IDENTIFIER);
+    r = consumeToken(b, DOT);
+    r = r && functionNameSegment(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // IDENTIFIER
+  public static boolean functionNameSegment(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "functionNameSegment")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, FUNCTION_NAME_SEGMENT, r);
     return r;
   }
 

@@ -46,8 +46,11 @@ l1Expression ::= EXPRESSION_LBRACE (functionName l1ParamsListDeclaration?)? EXPR
   name="Expression"
   methods=[ params="l1Param" ]
 }
-functionName ::= IDENTIFIER (DOT IDENTIFIER)* {
-  methods = [getFunctionName]
+functionName ::= functionNameSegment (DOT functionNameSegment)* {
+  methods=[
+    getFunctionName
+    segments="functionNameSegment"
+  ]
 }
 private l1ParamsListDeclaration ::= PARAMS_LIST_SEPARATOR l1ExpressionParamsList {
   pin=1
@@ -98,6 +101,9 @@ l3Expression ::= EXPRESSION_LBRACE functionName? EXPRESSION_RBRACE {
 }
 
 ///// Common /////
+functionNameSegment ::= IDENTIFIER {
+  methods=[ getReference ]
+}
 private content ::= REGULAR_STRING_PART
 fake template ::=
 fake expression ::=

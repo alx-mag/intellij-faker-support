@@ -1,25 +1,25 @@
 // This is a generated file. Not intended for manual editing.
 package com.github.alxmag.intellijfakersupport.lang.psi.impl;
 
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerFunctionName;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerFunctionNameSegment;
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerVisitor;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import static com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes.IDENTIFIER;
 
-public class FakerFunctionNameImpl extends ASTWrapperPsiElement implements FakerFunctionName {
+public class FakerFunctionNameSegmentImpl extends ASTWrapperPsiElement implements FakerFunctionNameSegment {
 
-  public FakerFunctionNameImpl(@NotNull ASTNode node) {
+  public FakerFunctionNameSegmentImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull FakerVisitor visitor) {
-    visitor.visitFunctionName(this);
+    visitor.visitFunctionNameSegment(this);
   }
 
   @Override
@@ -30,14 +30,14 @@ public class FakerFunctionNameImpl extends ASTWrapperPsiElement implements Faker
 
   @Override
   @NotNull
-  public String getFunctionName() {
-    return FakerPsiImplUtil.getFunctionName(this);
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
   @Override
   @NotNull
-  public List<FakerFunctionNameSegment> getSegments() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, FakerFunctionNameSegment.class);
+  public PsiReference getReference() {
+    return FakerPsiImplUtil.getReference(this);
   }
 
 }

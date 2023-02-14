@@ -2,16 +2,15 @@
 package com.github.alxmag.intellijfakersupport.lang.psi;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-public interface FakerFunctionName extends PsiElement {
+public interface FakerFunctionNameSegment extends PsiElement {
 
   @NotNull
-  String getFunctionName();
+  PsiElement getIdentifier();
 
   @NotNull
-  List<FakerFunctionNameSegment> getSegments();
+  PsiReference getReference();
 
 }

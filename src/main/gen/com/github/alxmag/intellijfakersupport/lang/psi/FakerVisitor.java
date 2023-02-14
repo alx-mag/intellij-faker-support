@@ -15,6 +15,10 @@ public class FakerVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitFunctionNameSegment(@NotNull FakerFunctionNameSegment o) {
+    visitPsiElement(o);
+  }
+
   public void visitL1Expression(@NotNull FakerL1Expression o) {
     visitExpression(o);
   }

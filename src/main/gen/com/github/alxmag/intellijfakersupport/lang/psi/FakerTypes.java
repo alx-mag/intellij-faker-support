@@ -9,6 +9,7 @@ import com.intellij.psi.tree.IElementType;
 public interface FakerTypes {
 
   IElementType FUNCTION_NAME = new FakerElementType("FUNCTION_NAME");
+  IElementType FUNCTION_NAME_SEGMENT = new FakerElementType("FUNCTION_NAME_SEGMENT");
   IElementType L_1_EXPRESSION = new FakerElementType("L_1_EXPRESSION");
   IElementType L_1_PARAM = new FakerElementType("L_1_PARAM");
   IElementType L_1_TEMPLATE = new FakerElementType("L_1_TEMPLATE");
@@ -35,6 +36,9 @@ public interface FakerTypes {
       IElementType type = node.getElementType();
       if (type == FUNCTION_NAME) {
         return new FakerFunctionNameImpl(node);
+      }
+      else if (type == FUNCTION_NAME_SEGMENT) {
+        return new FakerFunctionNameSegmentImpl(node);
       }
       else if (type == L_1_EXPRESSION) {
         return new FakerL1ExpressionImpl(node);
