@@ -5,4 +5,8 @@ import com.intellij.psi.JavaPsiFacade
 import com.intellij.psi.search.GlobalSearchScope
 
 fun Project.findFakerClass(scope: GlobalSearchScope) = JavaPsiFacade.getInstance(this)
-    .findClass("net.datafaker.Faker", scope)
+    .findClass(DataFakerClasses.FAKER, scope)
+
+object DataFakerClasses {
+    const val FAKER = "net.datafaker.Faker"
+}
