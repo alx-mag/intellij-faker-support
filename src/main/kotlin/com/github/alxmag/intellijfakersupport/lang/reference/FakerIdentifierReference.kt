@@ -39,8 +39,6 @@ class FakerIdentifierReference(nameSegment: FakerFunctionNameSegment) : PsiRefer
         }
     }
 
-
-    // TODO some methods are duplicated cause they declared in two superclasses of Faker. Should be a single result.
     override fun getVariants(): Array<*> {
         val (parentClass, isLast) = myElement.resolveFunctionCallInfo() ?: return emptyArray<Any>()
 
@@ -53,6 +51,8 @@ class FakerIdentifierReference(nameSegment: FakerFunctionNameSegment) : PsiRefer
         }
 
         variants = variants.sortedBy { it.name }
+            // Exclude inherited methods to prevent duplicates in lookup
+            .filter { it.findSuperMethods().isEmpty() }
 
         return variants.map { FakerMethodLookupElement(it) }
             .toList()
