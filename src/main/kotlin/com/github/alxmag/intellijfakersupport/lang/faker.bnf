@@ -32,7 +32,9 @@
   ]
 
   extends("l1Template|l2Template|l3Template")=template
-  extends("l1Expression|l2Expression|l3Expression")=expression
+  implements("l1Expression|l2Expression")="com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerParametrizedExpression"
+  implements("l3Expression")="com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerExpression"
+  extends("l1ParamList|l2ParamList")=paramList
 }
 
 fakerFile ::= l1Template
@@ -44,7 +46,7 @@ l1Template ::= (l1Expression | content)* {
 l1Expression ::= EXPRESSION_LBRACE (functionName l1ParamsListDeclaration?)? EXPRESSION_RBRACE {
   pin=1
   name="Expression"
-  methods=[ params="l1Param" ]
+  methods=[ paramList="l1ParamList" ]
 }
 functionName ::= functionNameSegment (DOT functionNameSegment)* {
   methods=[
@@ -52,10 +54,12 @@ functionName ::= functionNameSegment (DOT functionNameSegment)* {
     segments="functionNameSegment"
   ]
 }
-private l1ParamsListDeclaration ::= PARAMS_LIST_SEPARATOR l1ExpressionParamsList {
+private l1ParamsListDeclaration ::= PARAMS_LIST_SEPARATOR l1ParamList {
   pin=1
 }
-private l1ExpressionParamsList ::= l1ParamDeclaration*
+l1ParamList ::= l1ParamDeclaration* {
+  methods=[ params="l1Param" ]
+}
 private l1ParamDeclaration ::= l1Param (','|&'}') {
   pin=1
   recoverWhile=not_rbrace_or_next_l1ParamDeclaration
@@ -63,7 +67,11 @@ private l1ParamDeclaration ::= l1Param (','|&'}') {
 l1Param ::= PARAM_BEGIN l2Template PARAM_END {
   pin=1
   name="Single-quoted parameter"
-  methods=[ value="l2Template" ]
+  methods=[
+    value="l2Template"
+    getQuoteSymbol
+  ]
+  implements="com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerParam"
 }
 
 ///// L2 /////
@@ -73,12 +81,12 @@ l2Template ::= (l2Expression | content)* {
 l2Expression ::= EXPRESSION_LBRACE (functionName l2ExpressionParamsList?)? EXPRESSION_RBRACE {
   pin=1
   name="Nested expression"
-  methods=[ params="l2Param" ]
+  methods=[ paramList="l2ParamList" ]
 }
-private l2ExpressionParamsList ::= PARAMS_LIST_SEPARATOR l2ParamsList {
+private l2ExpressionParamsList ::= PARAMS_LIST_SEPARATOR l2ParamList {
   pin=1
 }
-private l2ParamsList ::= l2ParamDeclaration*
+l2ParamList ::= l2ParamDeclaration*
 private l2ParamDeclaration ::= l2Param (','|&'}') {
   pin=1
   recoverWhile=not_rbrace_or_next_l2ParamDeclaration
@@ -87,7 +95,11 @@ private l2ParamDeclaration ::= l2Param (','|&'}') {
 l2Param ::= PARAM_DOUBLE_QUOTE_BEGIN l3Template PARAM_DOUBLE_QUOTE_END {
   pin=1
   name="Double apostrophe parameter"
-  methods=[ value="l3Template" ]
+  methods=[
+    value="l3Template"
+    getQuoteSymbol
+  ]
+  implements="com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerParam"
 }
 
 ///// L3 /////
@@ -106,7 +118,7 @@ functionNameSegment ::= IDENTIFIER {
 }
 private content ::= REGULAR_STRING_PART
 fake template ::=
-fake expression ::=
+fake paramList ::=
 
 ///// Recover rules /////
 private not_rbrace_or_next_l1ParamDeclaration ::= !('}'|l1ParamDeclaration)

@@ -2,10 +2,15 @@ package com.github.alxmag.intellijfakersupport.lang.psi.impl
 
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerFunctionName
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerFunctionNameSegment
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerL1Param
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerL2Param
 import com.github.alxmag.intellijfakersupport.lang.reference.FakerIdentifierReference
 import com.intellij.psi.PsiReference
 
 object FakerPsiImplUtil {
+
+    private const val L1_PARAM_QUOTE = "'"
+    private const val L2_PARAM_QUOTE = "''"
 
     @JvmStatic
     fun getFunctionName(functionName: FakerFunctionName): String {
@@ -16,4 +21,10 @@ object FakerPsiImplUtil {
     fun getReference(functionNameSegment: FakerFunctionNameSegment): PsiReference {
         return FakerIdentifierReference(functionNameSegment)
     }
+
+    @JvmStatic
+    fun getQuoteSymbol(@Suppress("UNUSED_PARAMETER") param: FakerL1Param) = L1_PARAM_QUOTE
+
+    @JvmStatic
+    fun getQuoteSymbol(@Suppress("UNUSED_PARAMETER") param: FakerL2Param) = L2_PARAM_QUOTE
 }
