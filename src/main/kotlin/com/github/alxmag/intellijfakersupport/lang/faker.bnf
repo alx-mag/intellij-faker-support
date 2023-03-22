@@ -46,7 +46,10 @@ l1Template ::= (l1Expression | content)* {
 l1Expression ::= EXPRESSION_LBRACE (functionName l1ParamsListDeclaration?)? EXPRESSION_RBRACE {
   pin=1
   name="Expression"
-  methods=[ paramList="l1ParamList" ]
+  methods=[
+    paramList="l1ParamList"
+    getParamQuoteSymbol
+  ]
 }
 functionName ::= functionNameSegment (DOT functionNameSegment)* {
   methods=[
@@ -81,7 +84,10 @@ l2Template ::= (l2Expression | content)* {
 l2Expression ::= EXPRESSION_LBRACE (functionName l2ExpressionParamsList?)? EXPRESSION_RBRACE {
   pin=1
   name="Nested expression"
-  methods=[ paramList="l2ParamList" ]
+  methods=[
+    paramList="l2ParamList"
+    getParamQuoteSymbol
+  ]
 }
 private l2ExpressionParamsList ::= PARAMS_LIST_SEPARATOR l2ParamList {
   pin=1

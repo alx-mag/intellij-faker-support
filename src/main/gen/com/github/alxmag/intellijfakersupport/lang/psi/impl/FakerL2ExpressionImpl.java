@@ -48,4 +48,10 @@ public class FakerL2ExpressionImpl extends ASTWrapperPsiElement implements Faker
     return findChildByClass(FakerL2ParamList.class);
   }
 
+  @Override
+  @NotNull
+  public String getParamQuoteSymbol() {
+    return FakerPsiImplUtil.getParamQuoteSymbol(this);
+  }
+
 }

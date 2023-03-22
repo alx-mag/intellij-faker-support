@@ -1,9 +1,6 @@
 package com.github.alxmag.intellijfakersupport.lang.psi.impl
 
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerFunctionName
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerFunctionNameSegment
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerL1Param
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerL2Param
+import com.github.alxmag.intellijfakersupport.lang.psi.*
 import com.github.alxmag.intellijfakersupport.lang.reference.FakerIdentifierReference
 import com.intellij.psi.PsiReference
 
@@ -27,4 +24,10 @@ object FakerPsiImplUtil {
 
     @JvmStatic
     fun getQuoteSymbol(@Suppress("UNUSED_PARAMETER") param: FakerL2Param) = L2_PARAM_QUOTE
+
+    @JvmStatic
+    fun getParamQuoteSymbol(@Suppress("UNUSED_PARAMETER") param: FakerL1Expression) = L1_PARAM_QUOTE
+
+    @JvmStatic
+    fun getParamQuoteSymbol(@Suppress("UNUSED_PARAMETER") param: FakerL2Expression) = L2_PARAM_QUOTE
 }

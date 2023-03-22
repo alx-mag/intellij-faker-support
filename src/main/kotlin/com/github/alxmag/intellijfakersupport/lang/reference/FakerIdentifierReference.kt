@@ -1,14 +1,14 @@
 package com.github.alxmag.intellijfakersupport.lang.reference
 
-import com.github.alxmag.intellijfakersupport.lang.name
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerFunctionNameSegment
+import com.github.alxmag.intellijfakersupport.lang.psi.impl.argsQuoteSymbol
+import com.github.alxmag.intellijfakersupport.util.FakerPsiUtils
 import com.github.alxmag.intellijfakersupport.util.hasNoArgs
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.openapi.util.Iconable
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.*
-import com.intellij.psi.util.PsiFormatUtil
 
 class FakerIdentifierReference(nameSegment: FakerFunctionNameSegment) : PsiReferenceBase<FakerFunctionNameSegment>(
     nameSegment,
@@ -24,57 +24,56 @@ class FakerIdentifierReference(nameSegment: FakerFunctionNameSegment) : PsiRefer
     }
 
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
-        val (parentClass, isLast) = myElement.resolveFunctionCallInfo()
-            ?: return emptyArray()
-
-        val targetMethodName = FakerExpressionUtil.normalizeMethodName(myElement.name)
-
-        if (isLast) {
-            return parentClass.findMethodsByName(targetMethodName, true)
-                .map(::PsiElementResolveResult)
-                .toTypedArray()
-        } else {
-            val method = parentClass.findNoArgsApiMethod(targetMethodName) ?: return emptyArray()
-            return arrayOf(PsiElementResolveResult(method))
-        }
+        return myElement.resolveFunctionCallInfo()
+            ?.resolveMethods()
+            ?.map(::PsiElementResolveResult)
+            ?.toTypedArray()
+            ?: emptyArray()
     }
 
     override fun getVariants(): Array<*> {
-        val (parentClass, isLast) = myElement.resolveFunctionCallInfo() ?: return emptyArray<Any>()
+        val (parentClass, _, noArgsMethod, expression) = myElement.resolveFunctionCallInfo()
+            ?: return emptyArray<Any>()
 
-        var variants = parentClass.allMethods
+        var psiMethods = parentClass.allMethods
             .asSequence()
             .filter { it.isFakerApiMethod() }
 
-        if (!isLast) {
-            variants = variants.filter { it.hasNoArgs() }
+        if (noArgsMethod) {
+            psiMethods = psiMethods.filter { it.hasNoArgs() }
         }
 
-        variants = variants.sortedBy { it.name }
+        psiMethods = psiMethods.sortedBy { it.name }
             // Exclude inherited methods to prevent duplicates in lookup
             .filter { it.findSuperMethods().isEmpty() }
 
-        return variants.map { FakerMethodLookupElement(it) }
+        return psiMethods.map { FakerMethodLookupElement(it, expression.argsQuoteSymbol) }
             .toList()
             .toTypedArray()
     }
 }
 
-class FakerMethodLookupElement(private val method: PsiMethod) : LookupElement() {
+class FakerMethodLookupElement(
+    private val method: PsiMethod,
+    /**
+     * If provided, the lookup will render arguments available for the [method].
+     */
+    private val argsQuoteSymbol: String?
+) : LookupElement() {
     override fun getLookupString(): String = method.name
 
     override fun renderElement(presentation: LookupElementPresentation?) {
         presentation!!.icon = method.getIcon(Iconable.ICON_FLAG_VISIBILITY)
         presentation.itemText = method.name
 
-        presentation.tailText = method.parameterList.parameters.joinToString(separator = ", ", prefix = " ") { param ->
-            val text = PsiFormatUtil.formatVariable(
-                param,
-                PsiFormatUtil.SHOW_NAME or PsiFormatUtil.SHOW_TYPE,
-                PsiSubstitutor.EMPTY
-            )
-            "'$text'"
-        }.takeIf { it.isNotBlank() }
+        if (argsQuoteSymbol != null) {
+            presentation.tailText = method.parameterList
+                .parameters
+                .joinToString(separator = ", ", prefix = " ") { param ->
+                    FakerPsiUtils.createExpressionParamText(param, argsQuoteSymbol)
+                }
+                .takeIf { it.isNotBlank() }
+        }
         val returnType: PsiType? = method.returnType
         if (returnType != null) {
             presentation.typeText = returnType.presentableText

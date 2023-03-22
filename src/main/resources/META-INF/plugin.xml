@@ -30,6 +30,10 @@
         <completion.contributor
                 implementationClass="com.github.alxmag.intellijfakersupport.lang.codeinsight.FakerCompletionContributor"
                 language="Faker"/>
+
+        <codeInsight.parameterInfo
+                language="Faker"
+                implementationClass="com.github.alxmag.intellijfakersupport.lang.parameter.FakerParameterInfoHandler"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.intellij.intelliLang">
