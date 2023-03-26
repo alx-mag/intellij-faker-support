@@ -37,7 +37,6 @@ public class FakerParser implements PsiParser, LightPsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(L_1_PARAM_LIST, L_2_PARAM_LIST),
     create_token_set_(L_1_TEMPLATE, L_2_TEMPLATE, L_3_TEMPLATE),
   };
 

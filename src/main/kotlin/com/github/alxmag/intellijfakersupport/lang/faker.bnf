@@ -32,9 +32,9 @@
   ]
 
   extends("l1Template|l2Template|l3Template")=template
-  implements("l1Expression|l2Expression")="com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerParametrizedExpression"
-  implements("l3Expression")="com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerExpression"
-  extends("l1ParamList|l2ParamList")=paramList
+  implements("l1Expression|l2Expression")="com.github.alxmag.intellijfakersupport.lang.psi.FakerParametrizedExpression"
+  implements("l3Expression")="com.github.alxmag.intellijfakersupport.lang.psi.FakerExpression"
+  implements("l1ParamList|l2ParamList")=paramList
 }
 
 fakerFile ::= l1Template
@@ -74,7 +74,7 @@ l1Param ::= PARAM_BEGIN l2Template PARAM_END {
     value="l2Template"
     getQuoteSymbol
   ]
-  implements="com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerParam"
+  implements="com.github.alxmag.intellijfakersupport.lang.psi.FakerParam"
 }
 
 ///// L2 /////
@@ -92,7 +92,9 @@ l2Expression ::= EXPRESSION_LBRACE (functionName l2ExpressionParamsList?)? EXPRE
 private l2ExpressionParamsList ::= PARAMS_LIST_SEPARATOR l2ParamList {
   pin=1
 }
-l2ParamList ::= l2ParamDeclaration*
+l2ParamList ::= l2ParamDeclaration* {
+  methods=[ params="l2Param" ]
+}
 private l2ParamDeclaration ::= l2Param (','|&'}') {
   pin=1
   recoverWhile=not_rbrace_or_next_l2ParamDeclaration
@@ -105,7 +107,7 @@ l2Param ::= PARAM_DOUBLE_QUOTE_BEGIN l3Template PARAM_DOUBLE_QUOTE_END {
     value="l3Template"
     getQuoteSymbol
   ]
-  implements="com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerParam"
+  implements="com.github.alxmag.intellijfakersupport.lang.psi.FakerParam"
 }
 
 ///// L3 /////

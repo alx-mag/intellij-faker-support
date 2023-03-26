@@ -27,9 +27,9 @@
         <quoteHandler className="com.github.alxmag.intellijfakersupport.lang.editor.FakerQuoteHandler"
                       fileType="Faker"/>
 
-        <completion.contributor
-                implementationClass="com.github.alxmag.intellijfakersupport.lang.codeinsight.FakerCompletionContributor"
-                language="Faker"/>
+<!--        <completion.contributor-->
+<!--                implementationClass="com.github.alxmag.intellijfakersupport.lang.codeinsight.FakerCompletionContributor"-->
+<!--                language="Faker"/>-->
 
         <codeInsight.parameterInfo
                 language="Faker"

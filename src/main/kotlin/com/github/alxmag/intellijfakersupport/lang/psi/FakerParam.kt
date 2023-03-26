@@ -1,6 +1,5 @@
-package com.github.alxmag.intellijfakersupport.lang.psi.impl
+package com.github.alxmag.intellijfakersupport.lang.psi
 
-import com.github.alxmag.intellijfakersupport.lang.psi.FakerTemplate
 import com.intellij.psi.PsiElement
 
 interface FakerParam : PsiElement {

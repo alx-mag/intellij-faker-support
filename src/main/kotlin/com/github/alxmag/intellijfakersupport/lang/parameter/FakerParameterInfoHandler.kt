@@ -1,11 +1,15 @@
 package com.github.alxmag.intellijfakersupport.lang.parameter
 
-import com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerExpression
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerExpression
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerParametrizedExpression
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerTypes
+import com.github.alxmag.intellijfakersupport.lang.reference.isFakerApiMethod
 import com.github.alxmag.intellijfakersupport.lang.reference.resolveFunctionCallInfo
-import com.github.alxmag.intellijfakersupport.util.FakerPsiUtils
+import com.intellij.codeInsight.hint.api.impls.MethodParameterInfoHandler
 import com.intellij.lang.parameterInfo.*
 import com.intellij.psi.PsiMethod
 import com.intellij.psi.util.parentOfType
+import com.intellij.refactoring.suggested.endOffset
 
 class FakerParameterInfoHandler : ParameterInfoHandler<FakerExpression, PsiMethod> {
     override fun findElementForParameterInfo(context: CreateParameterInfoContext): FakerExpression? {
@@ -15,35 +19,31 @@ class FakerParameterInfoHandler : ParameterInfoHandler<FakerExpression, PsiMetho
             ?.lastOrNull()
         context.itemsToShow = lastSegment?.resolveFunctionCallInfo()
             ?.resolveMethods()
+            ?.filter { it.isFakerApiMethod() }
+            ?.toTypedArray()
         return expression
     }
 
     override fun findElementForUpdatingParameterInfo(context: UpdateParameterInfoContext): FakerExpression? {
-        // TODO
-//        val element = context.file.findElementAt(context.offset)
-//        PsiTreeUtil.getParentOfType(element, FakerPar)
-        return context.findExpression()
+        val element = context.file.findElementAt(context.offset) ?: return null
+        val expression = element.parentOfType<FakerExpression>() ?: return null
+
+        val paramList = (expression as? FakerParametrizedExpression)?.getParamList()
+        if (paramList != null) {
+            val offset = context.offset
+            val expressionRange = expression.textRange
+            var paramIndex = -1
+            if (offset > expressionRange.startOffset && offset < expressionRange.endOffset) {
+                paramIndex = ParameterInfoUtils.getCurrentParameterIndex(paramList.node, offset, FakerTypes.COMMA)
+            }
+
+            context.setCurrentParameter(paramIndex)
+        }
+        return expression
     }
 
     override fun updateUI(method: PsiMethod, context: ParameterInfoUIContext) {
-        val parameters = method.parameterList.parameters
-        val text = if (parameters.isEmpty()) {
-            "<no arguments>"
-        } else {
-            parameters.joinToString(separator = ", ") {
-                // TODO quote symbol should be taken basing on expression level
-                FakerPsiUtils.createExpressionParamText(it, "'")
-            }
-        }
-        context.setupUIComponentPresentation(
-            text,
-            -1,
-            -1,
-            false,
-            false,
-            true,
-            context.defaultParameterColor
-        )
+        MethodParameterInfoHandler.updateMethodPresentation(method, null, context)
     }
 
     override fun updateParameterInfo(parameterOwner: FakerExpression, context: UpdateParameterInfoContext) {
@@ -51,11 +51,13 @@ class FakerParameterInfoHandler : ParameterInfoHandler<FakerExpression, PsiMetho
     }
 
     override fun showParameterInfo(element: FakerExpression, context: CreateParameterInfoContext) {
-        context.showHint(element, element.textRange.startOffset + 1, this)
+        val offset = element.getFunctionName()?.endOffset ?: -1
+        context.showHint(element, offset, this)
     }
 
     private fun ParameterInfoContext.findExpression(): FakerExpression? {
         val element = this.file.findElementAt(this.offset)
-        return element?.parentOfType(true)
+        val expression = element?.parentOfType<FakerExpression>(true)
+        return expression as? FakerParametrizedExpression
     }
 }

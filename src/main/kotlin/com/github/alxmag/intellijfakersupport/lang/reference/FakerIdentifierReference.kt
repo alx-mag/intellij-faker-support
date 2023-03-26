@@ -44,8 +44,6 @@ class FakerIdentifierReference(nameSegment: FakerFunctionNameSegment) : PsiRefer
         }
 
         psiMethods = psiMethods.sortedBy { it.name }
-            // Exclude inherited methods to prevent duplicates in lookup
-            .filter { it.findSuperMethods().isEmpty() }
 
         return psiMethods.map { FakerMethodLookupElement(it, expression.argsQuoteSymbol) }
             .toList()

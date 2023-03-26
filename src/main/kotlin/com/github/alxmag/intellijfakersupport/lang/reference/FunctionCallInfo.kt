@@ -2,8 +2,8 @@ package com.github.alxmag.intellijfakersupport.lang.reference
 
 import com.github.alxmag.intellijfakersupport.datafaker.findFakerClass
 import com.github.alxmag.intellijfakersupport.lang.name
+import com.github.alxmag.intellijfakersupport.lang.psi.FakerExpression
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerFunctionNameSegment
-import com.github.alxmag.intellijfakersupport.lang.psi.impl.FakerExpression
 import com.github.alxmag.intellijfakersupport.lang.psi.impl.isArgsSupported
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiMethod

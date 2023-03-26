@@ -48,7 +48,9 @@ fun PsiMethod.isFakerApiMethod() = this.isPublic() and
         !this.isConstructor and
         !this.isObjectMethod() and
         !this.isBannedMethod() and
-        this.hasExpressionCallableParams()
+        this.hasExpressionCallableParams() and
+        // Exclude inherited methods to prevent duplicates in lookup
+        this.findSuperMethods().isEmpty()
 
 // TODO check also containing class
 /**
