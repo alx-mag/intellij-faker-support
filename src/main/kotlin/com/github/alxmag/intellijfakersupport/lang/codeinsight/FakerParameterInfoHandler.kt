@@ -1,4 +1,4 @@
-package com.github.alxmag.intellijfakersupport.lang.parameter
+package com.github.alxmag.intellijfakersupport.lang.codeinsight
 
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerExpression
 import com.github.alxmag.intellijfakersupport.lang.psi.FakerParametrizedExpression

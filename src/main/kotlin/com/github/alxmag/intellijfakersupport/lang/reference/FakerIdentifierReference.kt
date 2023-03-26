@@ -26,6 +26,7 @@ class FakerIdentifierReference(nameSegment: FakerFunctionNameSegment) : PsiRefer
     override fun multiResolve(incompleteCode: Boolean): Array<ResolveResult> {
         return myElement.resolveFunctionCallInfo()
             ?.resolveMethods()
+            ?.filter { it.isFakerApiMethod() }
             ?.map(::PsiElementResolveResult)
             ?.toTypedArray()
             ?: emptyArray()

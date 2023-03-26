@@ -22,18 +22,12 @@
         <lang.braceMatcher language="Faker"
                            implementationClass="com.github.alxmag.intellijfakersupport.lang.FakerBraceMatcher"/>
 
-        <!--TODO can be removed-->
-<!--        <typedHandler implementation="com.github.alxmag.intellijfakersupport.lang.editor.FakerTypedHandler"/>-->
         <quoteHandler className="com.github.alxmag.intellijfakersupport.lang.editor.FakerQuoteHandler"
                       fileType="Faker"/>
 
-<!--        <completion.contributor-->
-<!--                implementationClass="com.github.alxmag.intellijfakersupport.lang.codeinsight.FakerCompletionContributor"-->
-<!--                language="Faker"/>-->
-
         <codeInsight.parameterInfo
                 language="Faker"
-                implementationClass="com.github.alxmag.intellijfakersupport.lang.parameter.FakerParameterInfoHandler"/>
+                implementationClass="com.github.alxmag.intellijfakersupport.lang.codeinsight.FakerParameterInfoHandler"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.intellij.intelliLang">
