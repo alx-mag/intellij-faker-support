@@ -2,10 +2,11 @@
 <idea-plugin>
     <id>com.github.alxmag.intellijfakersupport</id>
     <name>Faker Support</name>
-    <vendor>alx-mag</vendor>
+    <vendor>Aleksandr Magomedov</vendor>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>org.intellij.intelliLang</depends>
+    <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
 
